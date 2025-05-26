@@ -334,6 +334,56 @@ function TimerScreen({ config, onGoHome }) {
         if ('wakeLock' in navigator) {
           wakeLockRef.current = await navigator.wakeLock.request('screen');
           console.log('Wake lock activated');
+          
+          // Re-acquire wake lock when page becomes visible again
+          const handleVisibilityChange = async () => {
+            if (wakeLockRef.current !== null && document.visibilityState === 'visible') {
+              try {
+                wakeLockRef.current = await navigator.wakeLock.request('screen');
+                console.log('Wake lock re-acquired');
+              } catch (err) {
+                console.warn('Wake lock re-acquisition failed:', err);
+              }
+            }
+          };
+          
+          document.addEventListener('visibilitychange', handleVisibilityChange);
+          
+          // Store the cleanup function
+          wakeLockRef.current.cleanup = () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+          };
+        } else {
+          // Fallback for older browsers - use video element trick
+          console.log('Wake Lock API not supported, using video fallback');
+          const video = document.createElement('video');
+          video.setAttribute('muted', '');
+          video.setAttribute('playsinline', '');
+          video.style.position = 'fixed';
+          video.style.top = '-1px';
+          video.style.left = '-1px';
+          video.style.width = '1px';
+          video.style.height = '1px';
+          video.style.opacity = '0';
+          video.style.pointerEvents = 'none';
+          
+          // Create a minimal video data URL
+          video.src = 'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMWF2YzEAAAAIZnJlZQAAAr1tZGF0AAACrgYF//+q3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE1MiByMjg1NCBlOWE1OTAzIC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAxNyAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTEgcmVmPTMgZGVibG9jaz0xOjA6MCBhbmFseXNlPTB4MzoweDExMyBtZT1oZXggc3VibWU9NyBwc3k9MSBwc3lfcmQ9MS4wMDowLjAwIG1peGVkX3JlZj0xIG1lX3JhbmdlPTE2IGNocm9tYV9tZT0xIHRyZWxsaXM9MSA4eDhkY3Q9MSBjcW09MCBkZWFkem9uZT0yMSwxMSBmYXN0X3Bza2lwPTEgY2hyb21hX3FwX29mZnNldD0tMiB0aHJlYWRzPTMgbG9va2FoZWFkX3RocmVhZHM9MSBzbGljZWRfdGhyZWFkcz0wIG5yPTAgZGVjaW1hdGU9MSBpbnRlcmxhY2VkPTAgYmx1cmF5X2NvbXBhdD0wIGNvbnN0cmFpbmVkX2ludHJhPTAgYmZyYW1lcz0zIGJfcHlyYW1pZD0yIGJfYWRhcHQ9MSBiX2JpYXM9MCBkaXJlY3Q9MSB3ZWlnaHRiPTEgb3Blbl9nb3A9MCB3ZWlnaHRwPTIga2V5aW50PTI1MCBrZXlpbnRfbWluPTEwIHNjZW5lY3V0PTQwIGludHJhX3JlZnJlc2g9MCByY19sb29rYWhlYWQ9NDAgcmM9Y3JmIG1idHJlZT0xIGNyZj0yMy4wIHFjb21wPTAuNjAgcXBtaW49MCBxcG1heD02OSBxcHN0ZXA9NCBpcF9yYXRpbz0xLjQwIGFxPTE6MS4wMACAAAAAD2WIhAA3//728P4FNjuZQQAAAu5tb292AAAAbG12aGQAAAAAAAAAAAAAAAAAAAPoAAAAZAABAAABAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAGGlvZHMAAAAAEICAgAcAT////v7/AAAF+XRyYWsAAABcdGtoZAAAAAMAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA';
+          
+          document.body.appendChild(video);
+          video.play().catch(() => {
+            console.log('Video fallback failed');
+          });
+          
+          // Store reference for cleanup
+          wakeLockRef.current = {
+            release: () => {
+              if (video.parentNode) {
+                video.parentNode.removeChild(video);
+              }
+            },
+            cleanup: () => {}
+          };
         }
       } catch (err) {
         console.warn('Wake lock failed:', err);
@@ -350,24 +400,40 @@ function TimerScreen({ config, onGoHome }) {
         // Preload the boxing bell sound
         bellAudioRef.current = new Audio('/sounds/boxing-bell.mp3');
         bellAudioRef.current.preload = 'auto';
+        bellAudioRef.current.volume = 0.8;
         
         // Set up for mobile - user interaction required
-        const enableAudio = () => {
-          if (bellAudioRef.current) {
-            bellAudioRef.current.play().then(() => {
-              bellAudioRef.current.pause();
+        const enableAudio = async () => {
+          try {
+            // Resume audio context if suspended
+            if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+              await audioContextRef.current.resume();
+              console.log('Audio context resumed');
+            }
+            
+            // Test bell audio
+            if (bellAudioRef.current) {
               bellAudioRef.current.currentTime = 0;
-            }).catch(() => {
-              console.log('Audio setup - user interaction needed');
-            });
+              const playPromise = bellAudioRef.current.play();
+              if (playPromise !== undefined) {
+                await playPromise;
+                bellAudioRef.current.pause();
+                bellAudioRef.current.currentTime = 0;
+                console.log('Audio enabled successfully');
+              }
+            }
+          } catch (err) {
+            console.log('Audio setup - user interaction needed:', err);
           }
 
           document.removeEventListener('touchstart', enableAudio);
           document.removeEventListener('click', enableAudio);
+          document.removeEventListener('keydown', enableAudio);
         };
         
         document.addEventListener('touchstart', enableAudio);
         document.addEventListener('click', enableAudio);
+        document.addEventListener('keydown', enableAudio);
         
       } catch (err) {
         console.warn('Audio context setup failed:', err);
@@ -397,6 +463,9 @@ function TimerScreen({ config, onGoHome }) {
       warningTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
       warningTimeoutsRef.current = [];
       if (wakeLockRef.current) {
+        if (wakeLockRef.current.cleanup) {
+          wakeLockRef.current.cleanup();
+        }
         wakeLockRef.current.release().catch(err => {
           console.warn('Wake lock release failed:', err);
         });
@@ -404,18 +473,27 @@ function TimerScreen({ config, onGoHome }) {
     };
   }, []);
 
-  const playBellSound = useCallback(() => {
+  const playBellSound = useCallback(async () => {
     if (bellAudioRef.current) {
       try {
+        // Resume audio context if suspended
+        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+          await audioContextRef.current.resume();
+        }
+        
         // Clone the audio to allow overlapping plays
         const bellClone = bellAudioRef.current.cloneNode();
+        bellClone.volume = 0.8;
         bellClone.currentTime = 0;
         
         // Play only the first 2 seconds
-        bellClone.play();
-        setTimeout(() => {
-          bellClone.pause();
-        }, 2000);
+        const playPromise = bellClone.play();
+        if (playPromise !== undefined) {
+          await playPromise;
+          setTimeout(() => {
+            bellClone.pause();
+          }, 2000);
+        }
         
         // Strong vibration for bell
         if (navigator.vibrate) {
@@ -423,15 +501,36 @@ function TimerScreen({ config, onGoHome }) {
         }
       } catch (err) {
         console.warn('Bell sound playback failed:', err);
+        // Fallback: try to generate a synthetic bell sound
+        if (audioContextRef.current) {
+          try {
+            const oscillator = audioContextRef.current.createOscillator();
+            const gainNode = audioContextRef.current.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContextRef.current.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContextRef.current.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(200, audioContextRef.current.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContextRef.current.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.5);
+            
+            oscillator.start();
+            oscillator.stop(audioContextRef.current.currentTime + 0.5);
+          } catch (synthErr) {
+            console.warn('Synthetic bell sound failed:', synthErr);
+          }
+        }
       }
     }
   }, []);
 
-  const playWoodClapSound = useCallback(() => {
+  const playWoodClapSound = useCallback(async () => {
     if (audioContextRef.current) {
       try {
         if (audioContextRef.current.state === 'suspended') {
-          audioContextRef.current.resume();
+          await audioContextRef.current.resume();
         }
         
         // Create wood clap sound using white noise burst

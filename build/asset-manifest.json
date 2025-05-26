@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/KravTime/static/css/main.ecbc0b36.css",
+    "main.js": "/KravTime/static/js/main.56126c2d.js",
+    "index.html": "/KravTime/index.html",
+    "main.ecbc0b36.css.map": "/KravTime/static/css/main.ecbc0b36.css.map",
+    "main.56126c2d.js.map": "/KravTime/static/js/main.56126c2d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ecbc0b36.css",
+    "static/js/main.56126c2d.js"
+  ]
+}
