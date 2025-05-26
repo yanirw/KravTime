@@ -52,6 +52,8 @@ export default function KravTimeApp() {
           top: 0;
           left: 0;
           background: #111827;
+          /* Ensure proper viewport handling on mobile */
+          min-height: -webkit-fill-available;
         }
         
         /* iPhone specific optimizations */
@@ -189,11 +191,18 @@ function HomeScreen({ onStartTimer }) {
               </div>
               <div className="relative">
                 <Slider
-                  value={[roundDuration / 30]}
+                  value={[roundDuration === 45 ? 1.5 : roundDuration / 30]}
                   max={20} 
                   min={1} 
-                  step={1}
-                  onValueChange={(value) => setRoundDuration(value[0] * 30)}
+                  step={0.5}
+                  onValueChange={(value) => {
+                    const sliderValue = value[0];
+                    if (sliderValue === 1.5) {
+                      setRoundDuration(45);
+                    } else {
+                      setRoundDuration(Math.round(sliderValue) * 30);
+                    }
+                  }}
                   className="py-1.5 [&>span:first-child]:h-1 [&>span:first-child>span]:h-1 [&>span:first-child>span]:bg-amber-500"
                 />
                 <div className="flex justify-between text-xs text-gray-300 mt-1 font-semibold">
@@ -325,7 +334,6 @@ function TimerScreen({ config, onGoHome }) {
   const wakeLockRef = useRef(null);
   const audioContextRef = useRef(null);
   const intervalRef = useRef(null);
-  const smoothIntervalRef = useRef(null);
   const bellAudioRef = useRef(null);
   const startTimeRef = useRef(null);
   const warningTimeoutsRef = useRef([]);
@@ -667,31 +675,47 @@ function TimerScreen({ config, onGoHome }) {
     }
   }, [playBellSound]);
 
-  // Smooth progress update logic
+  // Smooth progress update logic - optimized for mobile performance
   useEffect(() => {
     if (isActive && !isPaused && !isCountdown && !sessionCompleted) {
       startTimeRef.current = Date.now();
       const totalTime = isResting ? config.restDuration : config.roundDuration;
+      let animationFrameId;
+      let lastUpdateTime = 0;
       
-      smoothIntervalRef.current = setInterval(() => {
-        const elapsed = (Date.now() - startTimeRef.current) / 1000;
-        const currentProgress = ((totalTime - timeLeft + elapsed) / totalTime) * 100;
-        setSmoothProgress(Math.min(currentProgress, 100));
-      }, 50); // Update every 50ms for smooth animation
+      const updateProgress = (currentTime) => {
+        // Throttle updates to ~15fps for better mobile performance
+        if (currentTime - lastUpdateTime >= 66) {
+          const elapsed = (Date.now() - startTimeRef.current) / 1000;
+          const currentProgress = ((totalTime - timeLeft + elapsed) / totalTime) * 100;
+          const clampedProgress = Math.min(Math.max(currentProgress, 0), 100);
+          
+          // Only update if the change is significant (reduces unnecessary renders)
+          setSmoothProgress(prev => {
+            const diff = Math.abs(clampedProgress - prev);
+            return diff > 0.1 ? clampedProgress : prev;
+          });
+          
+          lastUpdateTime = currentTime;
+        }
+        
+        if (isActive && !isPaused && !isCountdown && !sessionCompleted) {
+          animationFrameId = requestAnimationFrame(updateProgress);
+        }
+      };
+      
+      animationFrameId = requestAnimationFrame(updateProgress);
+      
+      return () => {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      };
     } else {
-      if (smoothIntervalRef.current) {
-        clearInterval(smoothIntervalRef.current);
-      }
       // Update progress immediately when paused or stopped
       const totalTime = isResting ? config.restDuration : config.roundDuration;
       setSmoothProgress(((totalTime - timeLeft) / totalTime) * 100);
     }
-
-    return () => {
-      if (smoothIntervalRef.current) {
-        clearInterval(smoothIntervalRef.current);
-      }
-    };
   }, [isActive, isPaused, isCountdown, sessionCompleted, timeLeft, isResting, config]);
 
   // Main timer logic
@@ -751,9 +775,6 @@ function TimerScreen({ config, onGoHome }) {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    if (smoothIntervalRef.current) {
-      clearInterval(smoothIntervalRef.current);
-    }
     warningTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     warningTimeoutsRef.current = [];
     
@@ -792,13 +813,13 @@ function TimerScreen({ config, onGoHome }) {
   }
 
   return (
-    <div className={`h-full flex flex-col safe-area transition-colors duration-500 ${
+    <div className={`h-full flex flex-col safe-area transition-colors duration-500 touch-optimized mobile-optimized ${
       sessionCompleted ? 'bg-gray-900' :
       isPaused ? 'bg-red-800' :
       isResting ? 'bg-blue-800' : 'bg-green-800'
     }`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-white/30 bg-black/40">
+      <div className="flex items-center justify-between p-4 border-b border-white/30 bg-black/40 flex-shrink-0">
         <Button
           variant="ghost"
           size="sm"
@@ -824,95 +845,97 @@ function TimerScreen({ config, onGoHome }) {
         </Button>
       </div>
 
-      {/* Main Timer Display */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6">
-        <div className="text-center mb-8">
-          <div className="text-3xl text-white mb-6 font-bold">
-            {sessionCompleted ? '🎉 SESSION COMPLETE! 🎉' : 
-             isPaused ? '⏸️ PAUSED' :
-             isResting ? '😤 REST TIME' : '🥊 FIGHT TIME!'}
-          </div>
-          <div className={`text-9xl font-bold mb-8 text-white drop-shadow-2xl`}>
-            {sessionCompleted ? '00:00' : formatTime(timeLeft)}
-          </div>
-          <Progress 
-            value={getProgress()} 
-            className={`w-full max-w-80 h-6 bg-white/30 ${
-              isResting ? '[&>div]:bg-blue-400' : '[&>div]:bg-green-400'
-            }`}
-          />
-        </div>
-
-        {/* Phase Indicator */}
-        <div className={`text-5xl font-bold mb-8 px-8 py-6 rounded-2xl border-4 text-white shadow-2xl ${
-          sessionCompleted ? 'bg-green-700 border-green-400' :
-          isPaused ? 'bg-red-700 border-red-400' :
-          isResting ? 'bg-blue-700 border-blue-400' : 'bg-green-700 border-green-400'
-        }`}>
-          {sessionCompleted ? 'COMPLETE!' : 
-           isPaused ? 'PAUSED' :
-           isResting ? 'REST' : 'FIGHT!'}
-        </div>
-
-        {/* Control Buttons */}
-        {!sessionCompleted && (
-          <div className="flex gap-8 mb-8">
-            <Button
-              onClick={togglePause}
-              size="lg"
-              className={`w-24 h-24 rounded-full text-white font-bold text-2xl border-4 shadow-2xl ${
-                isPaused 
-                  ? 'bg-green-600 hover:bg-green-700 border-green-400' 
-                  : 'bg-red-600 hover:bg-red-700 border-red-400'
+      {/* Main Timer Display - Now scrollable */}
+      <div className="flex-1 overflow-y-auto scroll-container">
+        <div className="min-h-full flex flex-col items-center justify-center p-6 pb-8">
+          <div className="text-center mb-8">
+            <div className="text-3xl text-white mb-6 font-bold">
+              {sessionCompleted ? '🎉 SESSION COMPLETE! 🎉' : 
+               isPaused ? '⏸️ PAUSED' :
+               isResting ? '😤 REST TIME' : '🥊 FIGHT TIME!'}
+            </div>
+            <div className={`text-9xl font-bold mb-8 text-white drop-shadow-2xl`}>
+              {sessionCompleted ? '00:00' : formatTime(timeLeft)}
+            </div>
+            <Progress 
+              value={getProgress()} 
+              className={`w-full max-w-80 h-6 bg-white/30 ${
+                isResting ? '[&>div]:bg-blue-400' : '[&>div]:bg-green-400'
               }`}
-            >
-              {isPaused ? <Play className="w-12 h-12" /> : <Pause className="w-12 h-12" />}
-            </Button>
+            />
           </div>
-        )}
 
-        {/* Workout Info Box */}
-        <div className="bg-black/50 border-2 border-white/40 rounded-2xl p-6 mb-6 w-full max-w-md">
-          <div className="text-center text-white">
-            <h3 className="text-2xl font-bold mb-4 text-amber-300">Workout Info</h3>
-            <div className="grid grid-cols-3 gap-4 text-xl font-bold">
-              <div>
-                <div className="text-green-400 text-lg">Work</div>
-                <div>{formatTime(config.roundDuration)}</div>
-              </div>
-              <div>
-                <div className="text-blue-400 text-lg">Rest</div>
-                <div>{formatTime(config.restDuration)}</div>
-              </div>
-              <div>
-                <div className="text-blue-400 text-lg">Duration</div>
-                <div>{formatTime((config.roundDuration * config.rounds) + (config.restDuration * Math.max(0, config.rounds - 1)))}</div>
+          {/* Phase Indicator */}
+          <div className={`text-5xl font-bold mb-8 px-8 py-6 rounded-2xl border-4 text-white shadow-2xl ${
+            sessionCompleted ? 'bg-green-700 border-green-400' :
+            isPaused ? 'bg-red-700 border-red-400' :
+            isResting ? 'bg-blue-700 border-blue-400' : 'bg-green-700 border-green-400'
+          }`}>
+            {sessionCompleted ? 'COMPLETE!' : 
+             isPaused ? 'PAUSED' :
+             isResting ? 'REST' : 'FIGHT!'}
+          </div>
+
+          {/* Control Buttons */}
+          {!sessionCompleted && (
+            <div className="flex gap-8 mb-8">
+              <Button
+                onClick={togglePause}
+                size="lg"
+                className={`w-24 h-24 rounded-full text-white font-bold text-2xl border-4 shadow-2xl ${
+                  isPaused 
+                    ? 'bg-green-600 hover:bg-green-700 border-green-400' 
+                    : 'bg-red-600 hover:bg-red-700 border-red-400'
+                }`}
+              >
+                {isPaused ? <Play className="w-12 h-12" /> : <Pause className="w-12 h-12" />}
+              </Button>
+            </div>
+          )}
+
+          {/* Workout Info Box */}
+          <div className="bg-black/50 border-2 border-white/40 rounded-2xl p-6 mb-6 w-full max-w-md">
+            <div className="text-center text-white">
+              <h3 className="text-2xl font-bold mb-4 text-amber-300">Workout Info</h3>
+              <div className="grid grid-cols-3 gap-4 text-xl font-bold">
+                <div>
+                  <div className="text-green-400 text-lg">Work</div>
+                  <div>{formatTime(config.roundDuration)}</div>
+                </div>
+                <div>
+                  <div className="text-blue-400 text-lg">Rest</div>
+                  <div>{formatTime(config.restDuration)}</div>
+                </div>
+                <div>
+                  <div className="text-blue-400 text-lg">Duration</div>
+                  <div>{formatTime((config.roundDuration * config.rounds) + (config.restDuration * Math.max(0, config.rounds - 1)))}</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Session Complete Actions */}
-        {sessionCompleted && (
-          <div className="flex gap-6">
-            <Button
-              onClick={resetTimer}
-              size="lg"
-              className="bg-green-600 hover:bg-green-700 text-white font-bold text-2xl px-8 py-4 border-4 border-green-400 rounded-2xl"
-            >
-              <RotateCcw className="w-8 h-8 mr-3" />
-              Again
-            </Button>
-            <Button
-              onClick={onGoHome}
-              size="lg"
-              className="bg-gray-600 hover:bg-gray-700 text-white font-bold text-2xl px-8 py-4 border-4 border-gray-400 rounded-2xl"
-            >
-              <ArrowLeft className="w-8 h-8 mr-3" />
-              Home
-            </Button>
-          </div>
-        )}
+          {/* Session Complete Actions */}
+          {sessionCompleted && (
+            <div className="flex gap-6 mb-4">
+              <Button
+                onClick={resetTimer}
+                size="lg"
+                className="bg-green-600 hover:bg-green-700 text-white font-bold text-2xl px-8 py-4 border-4 border-green-400 rounded-2xl"
+              >
+                <RotateCcw className="w-8 h-8 mr-3" />
+                Again
+              </Button>
+              <Button
+                onClick={onGoHome}
+                size="lg"
+                className="bg-gray-600 hover:bg-gray-700 text-white font-bold text-2xl px-8 py-4 border-4 border-gray-400 rounded-2xl"
+              >
+                <ArrowLeft className="w-8 h-8 mr-3" />
+                Home
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
