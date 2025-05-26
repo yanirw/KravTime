@@ -296,9 +296,12 @@ function HomeScreen({ onStartTimer }) {
           </div>
 
           <div className="text-center text-xs text-gray-400 px-4 pb-2">
-            <p className="flex items-center justify-center font-semibold">
+            <p className="flex items-center justify-center font-semibold mb-1">
               <Shield className="w-3.5 h-3.5 mr-1.5 text-amber-500" />
               KravTime • Professional Training Timer
+            </p>
+            <p className="text-gray-500 text-xs">
+              Made by Yanir Winnik © 2025
             </p>
           </div>
         </div>
@@ -398,9 +401,18 @@ function TimerScreen({ config, onGoHome }) {
         }
         
         // Preload the boxing bell sound
-        bellAudioRef.current = new Audio('/sounds/boxing-bell.mp3');
+        bellAudioRef.current = new Audio(`${process.env.PUBLIC_URL}/sounds/boxing-bell.mp3`);
         bellAudioRef.current.preload = 'auto';
         bellAudioRef.current.volume = 0.8;
+        
+        // Add event listeners to track loading
+        bellAudioRef.current.addEventListener('canplaythrough', () => {
+          console.log('Bell sound loaded and ready to play');
+        });
+        
+        bellAudioRef.current.addEventListener('error', (e) => {
+          console.warn('Bell sound loading error:', e);
+        });
         
         // Set up for mobile - user interaction required
         const enableAudio = async () => {
@@ -413,13 +425,27 @@ function TimerScreen({ config, onGoHome }) {
             
             // Test bell audio
             if (bellAudioRef.current) {
-              bellAudioRef.current.currentTime = 0;
-              const playPromise = bellAudioRef.current.play();
-              if (playPromise !== undefined) {
-                await playPromise;
-                bellAudioRef.current.pause();
+              try {
                 bellAudioRef.current.currentTime = 0;
-                console.log('Audio enabled successfully');
+                const playPromise = bellAudioRef.current.play();
+                if (playPromise !== undefined) {
+                  await playPromise;
+                  bellAudioRef.current.pause();
+                  bellAudioRef.current.currentTime = 0;
+                  console.log('Bell audio enabled successfully');
+                }
+              } catch (testErr) {
+                console.warn('Bell audio test failed:', testErr);
+                                 // Try creating a fresh instance
+                 try {
+                   const testBell = new Audio(`${process.env.PUBLIC_URL}/sounds/boxing-bell.mp3`);
+                   testBell.volume = 0.1;
+                   await testBell.play();
+                   testBell.pause();
+                   console.log('Fresh bell audio instance works');
+                 } catch (freshErr) {
+                   console.warn('Fresh bell audio also failed:', freshErr);
+                 }
               }
             }
           } catch (err) {
@@ -474,55 +500,87 @@ function TimerScreen({ config, onGoHome }) {
   }, []);
 
   const playBellSound = useCallback(async () => {
-    if (bellAudioRef.current) {
-      try {
-        // Resume audio context if suspended
-        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-          await audioContextRef.current.resume();
-        }
-        
-        // Clone the audio to allow overlapping plays
-        const bellClone = bellAudioRef.current.cloneNode();
-        bellClone.volume = 0.8;
-        bellClone.currentTime = 0;
-        
-        // Play only the first 2 seconds
-        const playPromise = bellClone.play();
-        if (playPromise !== undefined) {
-          await playPromise;
+    try {
+      // Resume audio context if suspended
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
+      
+      // Try multiple approaches to play the bell sound
+      let bellPlayed = false;
+      
+      // Method 1: Try the preloaded audio
+      if (bellAudioRef.current && !bellPlayed) {
+        try {
+          bellAudioRef.current.currentTime = 0;
+          bellAudioRef.current.volume = 0.8;
+          await bellAudioRef.current.play();
+          
           setTimeout(() => {
-            bellClone.pause();
+            bellAudioRef.current.pause();
+            bellAudioRef.current.currentTime = 0;
           }, 2000);
-        }
-        
-        // Strong vibration for bell
-        if (navigator.vibrate) {
-          navigator.vibrate([300, 100, 300]);
-        }
-      } catch (err) {
-        console.warn('Bell sound playback failed:', err);
-        // Fallback: try to generate a synthetic bell sound
-        if (audioContextRef.current) {
-          try {
-            const oscillator = audioContextRef.current.createOscillator();
-            const gainNode = audioContextRef.current.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContextRef.current.destination);
-            
-            oscillator.frequency.setValueAtTime(800, audioContextRef.current.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(200, audioContextRef.current.currentTime + 0.5);
-            
-            gainNode.gain.setValueAtTime(0.3, audioContextRef.current.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.5);
-            
-            oscillator.start();
-            oscillator.stop(audioContextRef.current.currentTime + 0.5);
-          } catch (synthErr) {
-            console.warn('Synthetic bell sound failed:', synthErr);
-          }
+          
+          console.log('Preloaded bell sound played successfully');
+          bellPlayed = true;
+        } catch (preloadErr) {
+          console.warn('Preloaded bell failed:', preloadErr);
         }
       }
+      
+             // Method 2: Try a fresh audio instance
+       if (!bellPlayed) {
+         try {
+           const bellAudio = new Audio(`${process.env.PUBLIC_URL}/sounds/boxing-bell.mp3`);
+           bellAudio.volume = 0.8;
+           bellAudio.crossOrigin = 'anonymous';
+          
+          await bellAudio.play();
+          
+          setTimeout(() => {
+            bellAudio.pause();
+            bellAudio.currentTime = 0;
+          }, 2000);
+          
+          console.log('Fresh bell audio played successfully');
+          bellPlayed = true;
+        } catch (freshErr) {
+          console.warn('Fresh bell audio failed:', freshErr);
+        }
+      }
+      
+             // Method 3: Try relative path
+       if (!bellPlayed) {
+         try {
+           const bellAudio = new Audio('/KravTime/sounds/boxing-bell.mp3');
+           bellAudio.volume = 0.8;
+          
+          await bellAudio.play();
+          
+          setTimeout(() => {
+            bellAudio.pause();
+            bellAudio.currentTime = 0;
+          }, 2000);
+          
+          console.log('Relative path bell played successfully');
+          bellPlayed = true;
+        } catch (relativeErr) {
+          console.warn('Relative path bell failed:', relativeErr);
+        }
+      }
+      
+      // Strong vibration for bell (regardless of audio success)
+      if (navigator.vibrate) {
+        navigator.vibrate([300, 100, 300]);
+      }
+      
+      // If no bell sound worked, don't use synthetic fallback - just log
+      if (!bellPlayed) {
+        console.warn('All bell sound methods failed - no audio will play');
+      }
+      
+    } catch (err) {
+      console.warn('Bell sound function error:', err);
     }
   }, []);
 
