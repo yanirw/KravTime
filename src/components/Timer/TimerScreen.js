@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress } from '../ui/progress';
 import { Button } from '../ui/button';
-import { Play, Pause, Home, RotateCcw, Clock, Target, Timer } from 'lucide-react';
+import { Play, Pause, Home, RotateCcw } from 'lucide-react';
 import { CountdownDisplay } from './CountdownDisplay';
 import { useTimer } from '../../hooks/useTimer';
 import { useAudio } from '../../hooks/useAudio';
@@ -65,37 +65,7 @@ export function TimerScreen({ config, onGoHome }) {
     return 'bg-gradient-to-br from-green-900 via-krav-success to-green-800';
   };
 
-  // Get phase text and style
-  const getPhaseInfo = () => {
-    if (sessionCompleted) return { 
-      text: 'WORKOUT COMPLETE!', 
-      color: 'text-krav-success-bright',
-      icon: Target,
-      bgColor: 'bg-krav-success/20'
-    };
-    if (isPaused) return { 
-      text: 'PAUSED', 
-      color: 'text-krav-danger-bright',
-      icon: Pause,
-      bgColor: 'bg-krav-danger/20'
-    };
-    if (isResting) return { 
-      text: 'REST TIME', 
-      color: 'text-krav-rest-bright',
-      icon: Clock,
-      bgColor: 'bg-krav-rest/20'
-    };
-    return { 
-      text: 'FIGHT TIME!', 
-      color: 'text-krav-success-bright',
-      icon: Timer,
-      bgColor: 'bg-krav-success/20'
-    };
-  };
-
-  const phase = getPhaseInfo();
   const workoutProgress = calculateWorkoutProgress();
-  const PhaseIcon = phase.icon;
 
   return (
     <div className={`fixed inset-0 h-screen w-screen flex flex-col safe-area transition-all duration-700 ease-in-out touch-optimized mobile-optimized z-40 ${getBackgroundColor()}`}>
@@ -153,24 +123,14 @@ export function TimerScreen({ config, onGoHome }) {
       {/* Main Content Area with Better Spacing */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 relative">
         
-        {/* Enhanced Phase Indicator with Icon */}
+        {/* Enhanced Main Timer - Much Bigger for Gym Visibility */}
         <div className="text-center mb-6">
-          <div className={`inline-flex items-center gap-4 px-8 py-4 rounded-2xl backdrop-blur-lg ${phase.bgColor} border border-white/20 shadow-xl mb-4`}>
-            <PhaseIcon className={`w-8 h-8 ${phase.color}`} />
-            <div className={`text-3xl md:text-4xl font-black ${phase.color} tracking-wide`}>
-              {phase.text}
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Main Timer with Better Typography - Moved Down */}
-        <div className="text-center mb-6">
-          <div className={`text-8xl md:text-9xl font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
+          <div className={`text-10xl md:text-12xl font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
             isPaused ? 'animate-pulse opacity-70' : ''
           }`}>
             {sessionCompleted ? '00:00' : formatTime(timeLeft)}
           </div>
-          <div className="text-white/60 text-base font-medium mt-2">
+          <div className="text-white/60 text-xl font-medium mt-4">
             {isResting ? 'Recovery Period' : 'Training Active'}
           </div>
         </div>

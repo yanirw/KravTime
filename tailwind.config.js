@@ -94,6 +94,8 @@ module.exports = {
       fontSize: {
         '2xs': '0.625rem',
         '10xl': '10rem',
+        '12xl': '12rem',
+        '14xl': '14rem',
       },
       backdropBlur: {
         xs: '2px',
