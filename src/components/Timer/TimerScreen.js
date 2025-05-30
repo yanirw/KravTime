@@ -65,13 +65,29 @@ export function TimerScreen({ config, onGoHome }) {
     return 'bg-gradient-to-br from-green-900 via-krav-success to-green-800';
   };
 
+  // Get header background color based on state
+  const getHeaderBackgroundColor = () => {
+    if (sessionCompleted) return 'bg-gradient-to-b from-slate-700/60 to-slate-600/40';
+    if (isPaused) return 'bg-gradient-to-b from-red-900/60 to-red-800/40';
+    if (isResting) return 'bg-gradient-to-b from-blue-900/60 to-blue-800/40';
+    return 'bg-gradient-to-b from-green-900/60 to-green-800/40';
+  };
+
+  // Get footer background color based on state
+  const getFooterBackgroundColor = () => {
+    if (sessionCompleted) return 'bg-gradient-to-t from-slate-700/60 to-slate-600/40';
+    if (isPaused) return 'bg-gradient-to-t from-red-900/60 to-red-800/40';
+    if (isResting) return 'bg-gradient-to-t from-blue-900/60 to-blue-800/40';
+    return 'bg-gradient-to-t from-green-900/60 to-green-800/40';
+  };
+
   const workoutProgress = calculateWorkoutProgress();
 
   return (
     <div className={`fixed inset-0 h-screen w-screen flex flex-col safe-area transition-all duration-700 ease-in-out touch-optimized mobile-optimized z-40 ${getBackgroundColor()}`}>
       
       {/* Enhanced Top Header with Glass Morphism */}
-      <div className="p-6 bg-gradient-to-b from-black/40 to-black/20 backdrop-blur-xl border-b border-white/20">
+      <div className={`p-6 backdrop-blur-xl border-b border-white/20 ${getHeaderBackgroundColor()}`}>
         <div className="flex justify-between items-center mb-6">
           <Button
             onClick={onGoHome}
@@ -200,7 +216,7 @@ export function TimerScreen({ config, onGoHome }) {
       </div>
 
       {/* Enhanced Bottom Info Panel with Cards */}
-      <div className="p-6 bg-gradient-to-t from-black/40 to-black/20 backdrop-blur-xl border-t border-white/20">
+      <div className={`p-6 backdrop-blur-xl border-t border-white/20 ${getFooterBackgroundColor()}`}>
         {/* Workout Info Cards */}
         <div className="flex justify-center gap-4 text-center mb-4">
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 min-w-[80px] border border-white/20 shadow-lg">
