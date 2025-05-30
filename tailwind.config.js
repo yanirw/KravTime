@@ -39,12 +39,65 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        krav: {
+          dark: '#0A0F1C',
+          darker: '#060B15',
+          light: '#1A2332',
+          accent: '#F59E0B',
+          'accent-bright': '#FBBF24',
+          success: '#10B981',
+          'success-bright': '#34D399',
+          danger: '#EF4444',
+          'danger-bright': '#F87171',
+          rest: '#3B82F6',
+          'rest-bright': '#60A5FA',
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "1rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
       },
+      animation: {
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'bounce-gentle': 'bounce 2s infinite',
+        'scale-in': 'scaleIn 0.2s ease-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'glow': 'glow 2s ease-in-out infinite alternate',
+      },
+      keyframes: {
+        scaleIn: {
+          '0%': { transform: 'scale(0.9)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        glow: {
+          '0%': { boxShadow: '0 0 20px rgba(245, 158, 11, 0.3)' },
+          '100%': { boxShadow: '0 0 30px rgba(245, 158, 11, 0.6)' },
+        }
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+      },
+      fontSize: {
+        '2xs': '0.625rem',
+        '10xl': '10rem',
+      },
+      backdropBlur: {
+        xs: '2px',
+      }
     },
   },
   plugins: [],

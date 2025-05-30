@@ -27,10 +27,10 @@ export default function KravTimeApp() {
 
   return (
     <ErrorBoundary>
-      <div className="app-container">
+      <div className="app-container gradient-dark">
         <VersionDisplay />
         
-        {/* Global PWA Styles */}
+        {/* Enhanced Global PWA Styles */}
         <style jsx global>{`
           @viewport {
             width=device-width;
@@ -57,7 +57,8 @@ export default function KravTimeApp() {
             position: fixed;
             top: 0;
             left: 0;
-            background: #111827;
+            /* Enhanced background with smooth transitions */
+            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             /* Ensure proper viewport handling on mobile */
             min-height: -webkit-fill-available;
           }
@@ -69,9 +70,10 @@ export default function KravTimeApp() {
             }
           }
           
-          /* Prevent pull-to-refresh */
+          /* Prevent pull-to-refresh and enhance scrolling */
           body {
             overscroll-behavior: none;
+            scroll-behavior: smooth;
           }
           
           /* Hide scrollbars but keep functionality */
@@ -83,16 +85,49 @@ export default function KravTimeApp() {
             -ms-overflow-style: none;
             scrollbar-width: none;
           }
+
+          /* Enhanced screen transition animations */
+          .screen-enter {
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .screen-exit {
+            animation: slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateX(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+
+          @keyframes slideOut {
+            from {
+              opacity: 1;
+              transform: translateX(0);
+            }
+            to {
+              opacity: 0;
+              transform: translateX(-20px);
+            }
+          }
         `}</style>
         
-        {currentScreen === 'home' ? (
-          <HomeScreen onStartTimer={startTimer} />
-        ) : (
-          <TimerScreen 
-            config={timerConfig} 
-            onGoHome={goHome} 
-          />
-        )}
+        <div className="screen-enter">
+          {currentScreen === 'home' ? (
+            <HomeScreen onStartTimer={startTimer} />
+          ) : (
+            <TimerScreen 
+              config={timerConfig} 
+              onGoHome={goHome} 
+            />
+          )}
+        </div>
       </div>
     </ErrorBoundary>
   );

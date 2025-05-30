@@ -33,24 +33,29 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Safe area support for mobile devices */
+/* Enhanced safe area support for mobile devices */
 .safe-area {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
+  padding-top: max(env(safe-area-inset-top), 0.75rem);
+  padding-bottom: max(env(safe-area-inset-bottom), 0.75rem);
+  padding-left: max(env(safe-area-inset-left), 0.75rem);
+  padding-right: max(env(safe-area-inset-right), 0.75rem);
 }
 
 /* Ensure proper scrolling on mobile devices */
 .scroll-container {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  scroll-behavior: smooth;
 }
 
-/* Mobile performance optimizations */
+/* Enhanced mobile performance optimizations */
 @layer utilities {
   /* Optimize rendering for mobile devices */
   .mobile-optimized {
@@ -60,6 +65,7 @@
     backface-visibility: hidden;
     -webkit-perspective: 1000;
     perspective: 1000;
+    will-change: transform;
   }
   
   /* Smooth progress bar animations on mobile */
@@ -67,6 +73,7 @@
     will-change: width;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   /* Prevent text selection and improve touch performance */
@@ -77,5 +84,196 @@
     user-select: none;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Enhanced glass morphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Enhanced gradient backgrounds */
+  .gradient-dark {
+    background: linear-gradient(135deg, #0A0F1C 0%, #1A2332 50%, #0A0F1C 100%);
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+  }
+
+  /* Enhanced shadow utilities */
+  .shadow-glow {
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+  }
+
+  .shadow-glow-green {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.4), 0 0 60px rgba(16, 185, 129, 0.2);
+  }
+
+  .shadow-glow-blue {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), 0 0 60px rgba(59, 130, 246, 0.2);
+  }
+
+  .shadow-glow-red {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.4), 0 0 60px rgba(239, 68, 68, 0.2);
+  }
+
+  /* New shadow utilities for timer components */
+  .shadow-inner-glow {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
+  .shadow-card {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .shadow-button {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+
+  /* Interactive button effects */
+  .btn-interactive {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+    transform-origin: center;
+  }
+
+  .btn-interactive:active {
+    transform: scale(0.96);
+  }
+
+  .btn-interactive:hover {
+    transform: scale(1.04);
+  }
+
+  /* Enhanced pulse effects for different states */
+  .pulse-work {
+    animation: pulse-work 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .pulse-rest {
+    animation: pulse-rest 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .pulse-paused {
+    animation: pulse-paused 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-work {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    }
+    50% {
+      opacity: 0.9;
+      box-shadow: 0 0 0 25px rgba(16, 185, 129, 0);
+    }
+  }
+
+  @keyframes pulse-rest {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+    50% {
+      opacity: 0.9;
+      box-shadow: 0 0 0 25px rgba(59, 130, 246, 0);
+    }
+  }
+
+  @keyframes pulse-paused {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+    50% {
+      opacity: 0.7;
+      box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+    }
+  }
+
+  /* Shimmer effect for progress bars */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+  /* Enhanced glass morphism effects */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-header {
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-footer {
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Enhanced text gradients */
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-success {
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-danger {
+    background: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-rest {
+    background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 } 
