@@ -1,95 +1,51 @@
 # KravTime - Professional Training Timer
 
-A professional Krav Maga training timer app built with React. Features customizable rounds, work/rest intervals, audio cues, and mobile-optimized design.
+A professional Krav Maga training timer app built with React. Features customizable rounds, work/rest intervals, audio cues, and mobile-optimized PWA design.
 
-## Features
+## 💡 Why KravTime?
 
-- 🥊 Customizable training rounds (1-20)
-- ⏱️ Adjustable work duration (30 seconds - 10 minutes)
-- 😤 Configurable rest periods (30 seconds - 5 minutes)
-- 🔔 Audio bell sounds for round transitions (Web Audio API - won't interrupt background music)
-- 📱 Mobile-first responsive design
-- 🌙 Screen wake lock to prevent sleep during workouts
-- 📳 Vibration feedback on mobile devices
-- 🎯 Professional UFC/boxing-style interface
-- ℹ️ Version display toggle
-- 🎵 Background music compatibility (Spotify, YouTube, etc.)
+After 10 years as a Krav Maga instructor, I got frustrated with all the existing boxing/training timers. They either had terrible UX, interrupted my music, or just didn't work reliably during intense training sessions. not to mention countless adds. So I built the ultimate training timer I always wanted - one that actually works the way fighters need it to.
 
-## Getting Started
+## 🚀 Live App
 
-### Prerequisites
+**Visit: [https://yanirw.github.io/KravTime/](https://yanirw.github.io/KravTime/)**
 
-- Node.js (version 14 or higher)
-- npm or yarn
+No installation required - works instantly in your browser or as a PWA on mobile.
 
-### Installation
+## ✨ Features
 
-1. Install dependencies:
-```bash
-npm install
-```
+- 🥊 **Customizable Training**: 1-20 rounds, 30s-10min work, 30s-5min rest
+- 🔔 **Smart Audio**: Bell sounds and warning claps (compatible with background music)
+- 📱 **Mobile PWA**: Add to home screen for native app experience  
+- 🌙 **Screen Wake Lock**: Prevents sleep during workouts
+- 📳 **Haptic Feedback**: Vibration support on mobile devices
+- 🎯 **Professional UI**: UFC/boxing-style interface with smooth animations
+- 🎵 **Music Friendly**: Won't interrupt Spotify, YouTube, or other audio apps
+- ⚡ **Responsive Design**: Optimized for phones, tablets, and desktop
 
-2. Start the development server:
-```bash
-npm start
-```
+## 📱 Mobile Installation
 
-3. Open your browser and navigate to `http://localhost:3000`
+### iPhone:
+1. Open in Safari → Share button ⬆️ → "Add to Home Screen"
 
-The app will automatically reload when you make changes to the code.
+### Android:
+1. Open in Chrome → Menu ⋮ → "Add to home screen"
 
-### Building for Production
+## 🎯 Usage
 
-To create a production build:
+1. **Configure**: Set rounds, work duration, and rest duration
+2. **Start**: Press START for 3-second countdown
+3. **Train**: Follow visual cues (Green=Work, Blue=Rest, Red=Paused)
+4. **Control**: Pause/resume, reset, or go home anytime
 
-```bash
-npm run build
-```
+## 🛠️ Technologies
 
-This will create a `build` folder with optimized files ready for deployment.
-
-## Usage
-
-1. **Configure Your Workout:**
-   - Set the number of rounds (1-20)
-   - Adjust work duration (30 seconds to 10 minutes)
-   - Set rest duration (30 seconds to 5 minutes)
-
-2. **Start Training:**
-   - Press the START button
-   - Get ready during the 3-second countdown
-   - Follow the audio and visual cues
-
-3. **During Workout:**
-   - Green screen = Work time (FIGHT!)
-   - Orange screen = Rest time
-   - Red screen = Paused
-   - Audio bell signals round transitions (won't pause Spotify/YouTube)
-   - Triple claps warn of 10 seconds remaining
-
-4. **Controls:**
-   - Pause/Resume with the center button
-   - Reset workout with the reset button
-   - Return home with the back button
-   - Click the info (ℹ️) icon to view version
-
-## Mobile Installation
-
-This app works as a Progressive Web App (PWA):
-
-1. Open the app in your mobile browser
-2. Add to home screen when prompted
-3. Launch from your home screen for a native app experience
-
-## Technologies Used
-
-- React 18
-- Tailwind CSS
+- React 18 + Tailwind CSS
 - Radix UI components
-- Lucide React icons
-- Web Audio API for sound generation
-- Screen Wake Lock API for preventing sleep
+- Progressive Web App (PWA)
+- Web Audio API + Screen Wake Lock API
+- GitHub Pages deployment
 
-## License
+## 📄 License
 
-This project is open source and available under the MIT License. 
+MIT License - Made by [Yanir Winnik](https://github.com/yanirw) © 2025 
