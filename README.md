@@ -7,11 +7,13 @@ A professional Krav Maga training timer app built with React. Features customiza
 - 🥊 Customizable training rounds (1-20)
 - ⏱️ Adjustable work duration (30 seconds - 10 minutes)
 - 😤 Configurable rest periods (30 seconds - 5 minutes)
-- 🔔 Audio bell sounds for round transitions
+- 🔔 Audio bell sounds for round transitions (Web Audio API - won't interrupt background music)
 - 📱 Mobile-first responsive design
 - 🌙 Screen wake lock to prevent sleep during workouts
 - 📳 Vibration feedback on mobile devices
 - 🎯 Professional UFC/boxing-style interface
+- ℹ️ Version display toggle
+- 🎵 Background music compatibility (Spotify, YouTube, etc.)
 
 ## Getting Started
 
@@ -62,13 +64,14 @@ This will create a `build` folder with optimized files ready for deployment.
    - Green screen = Work time (FIGHT!)
    - Orange screen = Rest time
    - Red screen = Paused
-   - Audio bell signals round transitions
+   - Audio bell signals round transitions (won't pause Spotify/YouTube)
    - Triple claps warn of 10 seconds remaining
 
 4. **Controls:**
    - Pause/Resume with the center button
    - Reset workout with the reset button
    - Return home with the back button
+   - Click the info (ℹ️) icon to view version
 
 ## Mobile Installation
 
