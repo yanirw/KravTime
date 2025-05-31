@@ -105,9 +105,16 @@ export const useTimer = (config, audioCallbacks) => {
               return config.roundDuration;
             } else {
               if (currentRound < config.rounds) {
-                setIsResting(true);
-                setSmoothProgress(0);
-                return config.restDuration;
+                // If rest duration is 0, skip rest phase and go directly to next round
+                if (config.restDuration === 0) {
+                  setCurrentRound(prev => prev + 1);
+                  setSmoothProgress(0);
+                  return config.roundDuration;
+                } else {
+                  setIsResting(true);
+                  setSmoothProgress(0);
+                  return config.restDuration;
+                }
               } else {
                 setIsActive(false);
                 setSessionCompleted(true);

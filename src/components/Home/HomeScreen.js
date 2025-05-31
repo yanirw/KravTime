@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
-import { Timer, Shield, ChevronRight, Zap } from 'lucide-react';
+import { Timer, Shield, ChevronRight, Zap, Target } from 'lucide-react';
 import { ConfigurationPanel } from './ConfigurationPanel';
 import { SessionSummary } from './SessionSummary';
 
@@ -19,48 +19,74 @@ export function HomeScreen({ onStartTimer }) {
 
   return (
     <div className="h-full flex flex-col bg-transparent safe-area transition-all duration-500 animate-fade-in">
-      {/* Custom CSS for logo shine animation */}
+      {/* Minimal 80's retro logo CSS */}
       <style jsx>{`
-        @keyframes shine {
-          0%, 85%, 100% { 
-            opacity: 1;
-            transform: scale(1);
-            filter: drop-shadow(0 0 0px rgba(245, 158, 11, 0));
+        @keyframes subtleGlow {
+          0%, 100% {
+            text-shadow: 
+              0 0 2px currentColor,
+              0 0 4px currentColor;
           }
-          90% { 
-            opacity: 1.5;
-            transform: scale(1.15);
-            filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.9));
-          }
-          95% { 
-            opacity: 1.3;
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.7));
+          50% {
+            text-shadow: 
+              0 0 1px currentColor,
+              0 0 3px currentColor;
           }
         }
-        .logo-shine {
-          animation: shine 5s infinite;
+
+        @keyframes gentleFloat {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-1px);
+          }
+        }
+
+        .retro-title {
+          font-family: 'Arial Black', Arial, sans-serif;
+          font-weight: 900;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+        }
+
+        .retro-krav {
+          color: #FBBF24;
+          text-shadow: 
+            0 0 2px #F59E0B,
+            1px 1px 1px rgba(0,0,0,0.2);
+          animation: subtleGlow 4s ease-in-out infinite alternate;
+        }
+
+        .retro-time {
+          color: #FFFFFF;
+          text-shadow: 
+            0 0 2px rgba(255,255,255,0.3),
+            1px 1px 1px rgba(0,0,0,0.2);
+          animation: subtleGlow 4s ease-in-out infinite alternate;
+          animation-delay: 0.5s;
+        }
+
+        .retro-subtitle {
+          font-family: 'Arial', sans-serif;
+          font-weight: 600;
+          letter-spacing: 0.2em;
+          color: #94A3B8;
+          text-shadow: 0 0 1px rgba(148, 163, 184, 0.2);
+          animation: gentleFloat 5s ease-in-out infinite;
         }
       `}</style>
       
       <div className="flex-1 overflow-y-auto scroll-container px-4 py-3">
-        <div className="max-w-sm mx-auto space-y-4">
-          {/* Compact Header */}
-          <div className="text-center mb-4 animate-slide-up">
-            <div className="relative inline-block">
-              <h1 className="text-xl font-extrabold mb-1 tracking-tight flex items-center justify-center">
-                <div className="relative mr-2">
-                  <Timer className="w-5 h-5 text-krav-accent logo-shine" />
-                </div>
-                <span className="text-gradient-accent text-2xl font-black">
-                  KravTime
-                </span>
-              </h1>
-              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-12 h-0.5 bg-gradient-to-r from-krav-accent to-krav-accent-bright rounded-full"></div>
-            </div>
-            <p className="text-gray-300 text-xs font-semibold mt-2 flex items-center justify-center">
-              <Zap className="w-3 h-3 mr-1 text-krav-accent" />
-              Configure your training
+        <div className="max-w-md mx-auto space-y-4">
+          {/* Minimal 80's Retro Logo */}
+          <div className="text-center mb-2 animate-slide-up">
+            <h1 className="retro-title text-4xl md:text-5xl mb-1">
+              <span className="retro-krav">KRAV</span>
+              <span className="retro-time">TIME</span>
+            </h1>
+            <p className="retro-subtitle text-xs">
+              TRAINING TIMER
             </p>
           </div>
 
