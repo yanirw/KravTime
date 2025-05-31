@@ -94,6 +94,15 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
+  /* Improved glass effect with better contrast */
+  .glass-enhanced {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
   /* Enhanced gradient backgrounds */
   .gradient-dark {
     background: linear-gradient(135deg, #0A0F1C 0%, #1A2332 50%, #0A0F1C 100%);
@@ -275,5 +284,49 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Accessibility-focused enhancements */
+  .focus-visible-enhanced {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .focus-visible-enhanced:focus-visible {
+    outline: none;
+    ring: 4px solid rgba(255, 255, 255, 0.6);
+    ring-offset: 2px;
+    transform: scale(1.05);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.6), 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-interactive {
+      border-width: 2px;
+    }
+    
+    .text-gray-400 {
+      color: #D1D5DB;
+    }
+    
+    .text-gray-200 {
+      color: #F9FAFB;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .btn-interactive,
+    .focus-visible-enhanced,
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 } 
