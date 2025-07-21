@@ -85,10 +85,16 @@ export function TimerScreen({ config, onGoHome }) {
   const workoutProgress = calculateWorkoutProgress();
 
   return (
-    <div className={`fixed inset-0 h-screen w-screen flex flex-col safe-area transition-all duration-700 ease-in-out touch-optimized mobile-optimized z-40 ${getBackgroundColor()}`}>
+    <div 
+      key={`${isResting}-${isPaused}-${sessionCompleted}`}
+      className={`fixed inset-0 h-screen w-screen flex flex-col safe-area transition-all duration-700 ease-in-out touch-optimized mobile-optimized z-40 ${getBackgroundColor()}`}
+    >
       
       {/* Ultra Compact Header */}
-      <div className={`px-4 py-2 backdrop-blur-xl border-b border-white/20 ${getHeaderBackgroundColor()}`}>
+      <div 
+        key={`header-${isResting}-${isPaused}-${sessionCompleted}`}
+        className={`px-4 py-2 backdrop-blur-xl border-b border-white/20 transition-all duration-700 ${getHeaderBackgroundColor()}`}
+      >
         <div className="flex justify-between items-center mb-2">
           <Button
             onClick={onGoHome}
@@ -141,7 +147,7 @@ export function TimerScreen({ config, onGoHome }) {
         <div className="text-center mb-4">
           {sessionCompleted ? (
             <div className="space-y-3">
-              <div className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none">
+              <div className="text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[12rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none">
                 COMPLETE!
               </div>
               <div className="text-2xl sm:text-3xl md:text-4xl text-white/80 font-bold">
@@ -150,8 +156,8 @@ export function TimerScreen({ config, onGoHome }) {
             </div>
           ) : (
             <>
-              {/* MASSIVE TIMER */}
-              <div className={`text-8xl sm:text-9xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
+              {/* MASSIVE TIMER - Even Bigger for Gym Visibility */}
+              <div className={`text-[6rem] sm:text-[8rem] md:text-[12rem] lg:text-[16rem] xl:text-[20rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
                 isPaused ? 'animate-pulse opacity-70' : ''
               }`}>
                 {formatTime(timeLeft)}
@@ -231,7 +237,10 @@ export function TimerScreen({ config, onGoHome }) {
       </div>
 
       {/* Much Bigger Footer Elements */}
-      <div className={`px-4 py-4 backdrop-blur-xl border-t border-white/20 ${getFooterBackgroundColor()}`}>
+      <div 
+        key={`footer-${isResting}-${isPaused}-${sessionCompleted}`}
+        className={`px-4 py-4 backdrop-blur-xl border-t border-white/20 transition-all duration-700 ${getFooterBackgroundColor()}`}
+      >
         {/* Much Bigger Workout Info Cards */}
         <div className="flex justify-center gap-3 text-center mb-4">
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 min-w-[100px] border border-white/20 shadow-lg">
