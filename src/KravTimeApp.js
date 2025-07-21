@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { VersionDisplay } from "./components/Common/VersionDisplay";
+import { GuideDisplay } from "./components/Common/VersionDisplay";
 import { HomeScreen } from "./components/Home/HomeScreen";
 import { TimerScreen } from "./components/Timer/TimerScreen";
 import ErrorBoundary from "./components/Common/ErrorBoundary";
@@ -28,7 +28,7 @@ export default function KravTimeApp() {
   return (
     <ErrorBoundary>
       <div className="app-container gradient-dark">
-        <VersionDisplay />
+        <GuideDisplay />
         
         {/* Enhanced Global PWA Styles */}
         <style jsx global>{`

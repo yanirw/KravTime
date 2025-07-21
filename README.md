@@ -14,7 +14,7 @@ No installation required - works instantly in your browser or as a PWA on mobile
 
 ## ✨ Features
 
-- 🥊 **Customizable Training**: 1-20 rounds, 30s-10min work, 30s-5min rest
+- 🥊 **Customizable Training**: 1-50 rounds, 30s-10min work, 30s-5min rest
 - 🔔 **Smart Audio**: Bell sounds and warning claps (compatible with background music)
 - 📱 **Mobile PWA**: Add to home screen for native app experience  
 - 🌙 **Screen Wake Lock**: Prevents sleep during workouts

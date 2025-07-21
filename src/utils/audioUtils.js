@@ -277,9 +277,9 @@ export const playWarningSound = async () => {
 export const playTripleBell = async () => {
   try {
     // Fast-paced triple bell like in boxing - 400ms apart
-    await playBellSound();
-    setTimeout(() => playBellSound(), 400);
-    setTimeout(() => playBellSound(), 800);
+    await playBellSound(1.3);
+    setTimeout(() => playBellSound(1.3), 400);
+    setTimeout(() => playBellSound(1.3), 800);
     
     // Extended vibration pattern for session end
     if (navigator.vibrate) {
