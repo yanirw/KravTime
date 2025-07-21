@@ -81,8 +81,8 @@ export function ConfigurationPanel({
           />
           <div className="flex justify-between items-center text-sm text-gray-300 mt-1 font-semibold">
             <span>1</span>
-            <span className="text-base text-white">
-              <span className="text-krav-accent">{rounds}</span> round{rounds !== 1 ? 's' : ''}
+            <span className="text-xl text-white font-bold">
+              <span className="text-krav-accent text-xl font-bold">{rounds}</span> round{rounds !== 1 ? 's' : ''}
             </span>
             <span>20</span>
           </div>
@@ -136,8 +136,8 @@ export function ConfigurationPanel({
           />
           <div className="flex justify-between items-center text-sm text-gray-300 mt-1 font-semibold">
             <span>0:15</span>
-            <span className="text-base text-white">
-              <span className="text-krav-success">{formatTime(roundDuration)}</span> per round
+            <span className="text-xl text-white font-bold">
+              <span className="text-krav-success text-xl font-bold">{formatTime(roundDuration)}</span> per round
             </span>
             <span>5:00</span>
           </div>
@@ -191,8 +191,8 @@ export function ConfigurationPanel({
           />
           <div className="flex justify-between items-center text-sm text-gray-300 mt-1 font-semibold">
             <span>0:00</span>
-            <span className="text-base text-white">
-              <span className="text-krav-rest">{restDuration === 0 ? 'No rest' : formatTime(restDuration)}</span> between rounds
+            <span className="text-xl text-white font-bold">
+              <span className="text-krav-rest text-xl font-bold">{restDuration === 0 ? 'No rest' : formatTime(restDuration)}</span> between rounds
             </span>
             <span>2:00</span>
           </div>

@@ -98,7 +98,7 @@ export const resumeAudioContext = async () => {
  * @param {Function} onEnded - Callback when sound finishes
  * @returns {AudioBufferSourceNode|null} - The created source node
  */
-const createAndPlaySound = (buffer, volume = 0.8, onEnded = null) => {
+const createAndPlaySound = (buffer, volume = 1.0, onEnded = null) => {
   try {
     if (!audioContext || !buffer) return null;
 
@@ -142,7 +142,7 @@ const createAndPlaySound = (buffer, volume = 0.8, onEnded = null) => {
  * @param {number} volume - Volume level (0-1)
  * @returns {Promise<boolean>} - Success status
  */
-export const playBellSound = async (volume = 0.8) => {
+export const playBellSound = async (volume = 1.0) => {
   try {
     if (!audioContext || !bellAudioBuffer) {
       console.warn('Audio context or bell buffer not ready');
