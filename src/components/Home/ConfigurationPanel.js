@@ -153,9 +153,9 @@ export function ConfigurationPanel({
     <div className="glass-enhanced rounded-2xl shadow-2xl shadow-black/40 p-5 mb-4 border border-white/20 backdrop-blur-xl max-w-md mx-auto">
       {/* Rounds Section */}
       <div className="mb-4">
-        <label className="block text-base font-bold text-white mb-4 flex items-center" id="rounds-label">
+        <label className="block text-lg font-bold text-white mb-4 flex items-center" id="rounds-label">
           <div className="relative mr-3">
-            <Shield className="w-5 h-5 text-krav-accent" />
+            <Shield className="w-6 h-6 text-krav-accent" />
             <div className="absolute -inset-0.5 rounded-full bg-krav-accent/20 animate-pulse"></div>
           </div>
           <span className="text-gradient-accent font-bold">Rounds</span>
@@ -165,7 +165,7 @@ export function ConfigurationPanel({
             <Button
               key={num}
               variant={rounds === num ? "default" : "outline"}
-              className={`h-11 text-base font-bold transition-all duration-200 btn-interactive focus-visible-enhanced ${
+              className={`h-12 text-lg font-bold transition-all duration-200 btn-interactive focus-visible-enhanced ${
                 rounds === num 
                   ? "bg-gradient-to-br from-krav-accent to-krav-accent-bright hover:from-krav-accent-bright hover:to-krav-accent text-black border-krav-accent shadow-glow" 
                   : ""
@@ -180,20 +180,20 @@ export function ConfigurationPanel({
           ))}
         </div>
         <div className="relative">
-                      <Slider
-              value={[rounds]}
-              max={20}
-              min={1}
-              step={1}
-              onValueChange={(value) => setRounds(value[0])}
-              className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-accent [&>span:first-child>span]:to-krav-accent-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
-              aria-label="Number of rounds slider"
-              aria-valuemin={1}
-              aria-valuemax={20}
-              aria-valuenow={rounds}
-              aria-valuetext={`${rounds} round${rounds !== 1 ? 's' : ''}`}
-            />
-          <div className="flex justify-between items-center text-sm text-gray-300 mt-1 font-semibold">
+          <Slider
+            value={[rounds]}
+            max={20}
+            min={1}
+            step={1}
+            onValueChange={(value) => setRounds(value[0])}
+            className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-accent [&>span:first-child>span]:to-krav-accent-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
+            aria-label="Number of rounds slider"
+            aria-valuemin={1}
+            aria-valuemax={20}
+            aria-valuenow={rounds}
+            aria-valuetext={`${rounds} round${rounds !== 1 ? 's' : ''}`}
+          />
+          <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
             <span>1</span>
             {isEditingRounds ? (
               <input
@@ -222,9 +222,9 @@ export function ConfigurationPanel({
 
       {/* Round Duration Section */}
       <div className="mb-4">
-        <label className="block text-base font-bold text-white mb-4 flex items-center" id="round-duration-label">
+        <label className="block text-lg font-bold text-white mb-4 flex items-center" id="round-duration-label">
           <div className="relative mr-3">
-            <Timer className="w-5 h-5 text-krav-success" />
+            <Timer className="w-6 h-6 text-krav-success" />
             <div className="absolute -inset-0.5 rounded-full bg-krav-success/20 animate-pulse"></div>
           </div>
           <span className="text-gradient-success font-bold">Round Duration</span>
@@ -234,7 +234,7 @@ export function ConfigurationPanel({
             <Button
               key={seconds}
               variant={roundDuration === seconds ? "default" : "outline"}
-              className={`h-11 text-base font-bold transition-all duration-200 btn-interactive focus-visible-enhanced ${
+              className={`h-12 text-lg font-bold transition-all duration-200 btn-interactive focus-visible-enhanced ${
                 roundDuration === seconds 
                   ? "bg-gradient-to-br from-krav-success to-krav-success-bright hover:from-krav-success-bright hover:to-krav-success text-white border-krav-success shadow-glow-green" 
                   : ""
@@ -265,7 +265,7 @@ export function ConfigurationPanel({
             aria-valuenow={roundDuration}
             aria-valuetext={`${formatTime(roundDuration)} per round`}
           />
-          <div className="flex justify-between items-center text-sm text-gray-300 mt-1 font-semibold">
+          <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
             <span>0:15</span>
             {isEditingRoundDuration ? (
               <input
@@ -294,9 +294,9 @@ export function ConfigurationPanel({
 
       {/* Rest Duration Section */}
       <div className="mb-2">
-        <label className="block text-base font-bold text-white mb-4 flex items-center" id="rest-duration-label">
+        <label className="block text-lg font-bold text-white mb-4 flex items-center" id="rest-duration-label">
           <div className="relative mr-3">
-            <Clock className="w-5 h-5 text-krav-rest" />
+            <Clock className="w-6 h-6 text-krav-rest" />
             <div className="absolute -inset-0.5 rounded-full bg-krav-rest/20 animate-pulse"></div>
           </div>
           <span className="text-gradient-rest font-bold">Rest Duration</span>
@@ -306,7 +306,7 @@ export function ConfigurationPanel({
             <Button
               key={seconds}
               variant={restDuration === seconds ? "default" : "outline"}
-              className={`h-11 text-base font-bold transition-all duration-200 btn-interactive focus-visible-enhanced ${
+              className={`h-12 text-lg font-bold transition-all duration-200 btn-interactive focus-visible-enhanced ${
                 restDuration === seconds 
                   ? "bg-gradient-to-br from-krav-rest to-krav-rest-bright hover:from-krav-rest-bright hover:to-krav-rest text-white border-krav-rest shadow-glow-blue" 
                   : ""
@@ -337,7 +337,7 @@ export function ConfigurationPanel({
             aria-valuenow={restDuration}
             aria-valuetext={`${restDuration === 0 ? 'No rest' : formatTime(restDuration)} between rounds`}
           />
-          <div className="flex justify-between items-center text-sm text-gray-300 mt-1 font-semibold">
+          <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
             <span>0:00</span>
             {isEditingRestDuration ? (
               <input

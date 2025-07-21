@@ -12,16 +12,16 @@ const Button = React.forwardRef(({ className, variant = "default", size = "defau
   };
 
   const sizes = {
-    default: "h-10 px-4 py-2",
-    sm: "h-9 rounded-md px-3",
-    lg: "h-11 rounded-md px-8",
-    icon: "h-10 w-10",
+    default: "h-12 px-5 py-3",  // Increased from h-10 px-4 py-2
+    sm: "h-10 rounded-md px-4", // Increased from h-9 px-3
+    lg: "h-14 rounded-md px-10", // Increased from h-11 px-8
+    icon: "h-12 w-12",          // Increased from h-10 w-10
   };
 
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:scale-105 disabled:pointer-events-none disabled:opacity-50 active:scale-95",
+        "inline-flex items-center justify-center rounded-md text-base font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:scale-105 disabled:pointer-events-none disabled:opacity-50 active:scale-95 min-h-[44px]", // Changed from text-sm font-medium to text-base font-semibold, added min-h for touch targets
         variants[variant],
         sizes[size],
         className

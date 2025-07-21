@@ -45,7 +45,7 @@ export const useTimer = (config, audioCallbacks) => {
         clearInterval(countdownIntervalRef.current);
       }
     };
-  }, [isCountdown, countdownTime, playBell]);
+  }, [isCountdown, playBell]); // Removed countdownTime from dependencies to prevent multiple intervals
 
   // Smooth progress update with better performance
   useEffect(() => {

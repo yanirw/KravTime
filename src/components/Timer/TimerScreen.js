@@ -11,6 +11,7 @@ import { formatTime } from '../../utils/timeUtils';
 /**
  * Timer Screen component
  * Main workout timer interface with countdown, progress, and controls
+ * Optimized for gym visibility with large timer display and better mobile fit
  */
 export function TimerScreen({ config, onGoHome }) {
   // Initialize hooks
@@ -67,18 +68,18 @@ export function TimerScreen({ config, onGoHome }) {
 
   // Get header background color based on state
   const getHeaderBackgroundColor = () => {
-    if (sessionCompleted) return 'bg-gradient-to-b from-slate-700/60 to-slate-600/40';
-    if (isPaused) return 'bg-gradient-to-b from-red-900/60 to-red-800/40';
-    if (isResting) return 'bg-gradient-to-b from-blue-900/60 to-blue-800/40';
-    return 'bg-gradient-to-b from-green-900/60 to-green-800/40';
+    if (sessionCompleted) return 'bg-gradient-to-b from-slate-700/30 to-slate-600/15';
+    if (isPaused) return 'bg-gradient-to-b from-red-900/30 to-red-800/15';
+    if (isResting) return 'bg-gradient-to-b from-blue-900/30 to-blue-800/15';
+    return 'bg-gradient-to-b from-green-900/30 to-green-800/15';
   };
 
   // Get footer background color based on state
   const getFooterBackgroundColor = () => {
-    if (sessionCompleted) return 'bg-gradient-to-t from-slate-700/60 to-slate-600/40';
-    if (isPaused) return 'bg-gradient-to-t from-red-900/60 to-red-800/40';
-    if (isResting) return 'bg-gradient-to-t from-blue-900/60 to-blue-800/40';
-    return 'bg-gradient-to-t from-green-900/60 to-green-800/40';
+    if (sessionCompleted) return 'bg-gradient-to-t from-slate-700/30 to-slate-600/15';
+    if (isPaused) return 'bg-gradient-to-t from-red-900/30 to-red-800/15';
+    if (isResting) return 'bg-gradient-to-t from-blue-900/30 to-blue-800/15';
+    return 'bg-gradient-to-t from-green-900/30 to-green-800/15';
   };
 
   const workoutProgress = calculateWorkoutProgress();
@@ -86,35 +87,32 @@ export function TimerScreen({ config, onGoHome }) {
   return (
     <div className={`fixed inset-0 h-screen w-screen flex flex-col safe-area transition-all duration-700 ease-in-out touch-optimized mobile-optimized z-40 ${getBackgroundColor()}`}>
       
-      {/* Enhanced Top Header with Glass Morphism */}
-      <div className={`p-6 backdrop-blur-xl border-b border-white/20 ${getHeaderBackgroundColor()}`}>
-        <div className="flex justify-between items-center mb-6">
+      {/* Ultra Compact Header */}
+      <div className={`px-4 py-2 backdrop-blur-xl border-b border-white/20 ${getHeaderBackgroundColor()}`}>
+        <div className="flex justify-between items-center mb-2">
           <Button
             onClick={onGoHome}
-            className="bg-white/15 hover:bg-white/25 border border-white/30 text-white p-4 rounded-2xl transition-all duration-300 backdrop-blur-sm shadow-lg hover:scale-105 active:scale-95"
+            className="bg-white/15 hover:bg-white/25 border border-white/30 text-white p-3 rounded-xl transition-all duration-300 backdrop-blur-sm shadow-lg hover:scale-105 active:scale-95"
           >
             <Home className="w-6 h-6" />
           </Button>
           
           <div className="text-center">
-            <div className="text-white font-black text-2xl mb-2 tracking-tight">
-              Round {currentRound}
-            </div>
-            <div className="text-white/80 text-base font-semibold">
-              of {config.rounds} rounds
+            <div className="text-white font-black text-2xl md:text-3xl lg:text-4xl tracking-tight">
+              Round {currentRound} / {config.rounds}
             </div>
           </div>
           
           <Button
             onClick={resetTimer}
-            className="bg-white/15 hover:bg-white/25 border border-white/30 text-white p-4 rounded-2xl transition-all duration-300 backdrop-blur-sm shadow-lg hover:scale-105 active:scale-95"
+            className="bg-white/15 hover:bg-white/25 border border-white/30 text-white p-3 rounded-xl transition-all duration-300 backdrop-blur-sm shadow-lg hover:scale-105 active:scale-95"
           >
             <RotateCcw className="w-6 h-6" />
           </Button>
         </div>
 
-        {/* Simple and Clean Round Progress - Back in Header */}
-        <div className="flex justify-center gap-3">
+        {/* Ultra Compact Round Progress */}
+        <div className="flex justify-center gap-2">
           {Array.from({ length: config.rounds }, (_, index) => {
             const roundNumber = index + 1;
             const isCompleted = roundNumber < currentRound;
@@ -123,11 +121,11 @@ export function TimerScreen({ config, onGoHome }) {
             return (
               <div
                 key={roundNumber}
-                className={`w-12 h-5 transition-all duration-500 ease-in-out rounded-full ${
+                className={`w-12 h-4 transition-all duration-500 ease-in-out rounded-full ${
                   isCompleted 
-                    ? 'bg-white shadow-lg' 
+                    ? 'bg-white shadow-md' 
                     : isCurrent 
-                      ? `${isResting ? 'bg-krav-rest-bright' : 'bg-krav-accent-bright'} animate-pulse shadow-lg` 
+                      ? `${isResting ? 'bg-krav-rest-bright' : 'bg-krav-accent-bright'} animate-pulse shadow-md` 
                       : 'bg-white/30'
                 }`}
               />
@@ -136,77 +134,94 @@ export function TimerScreen({ config, onGoHome }) {
         </div>
       </div>
 
-      {/* Main Content Area with Better Spacing */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 relative">
+      {/* MASSIVE TIMER SECTION - More Space */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 relative">
         
-        {/* Enhanced Main Timer - Much Bigger for Gym Visibility */}
-        <div className="text-center mb-6">
-          <div className={`text-10xl md:text-12xl font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
-            isPaused ? 'animate-pulse opacity-70' : ''
-          }`}>
-            {sessionCompleted ? '00:00' : formatTime(timeLeft)}
-          </div>
-          <div className="text-white/60 text-xl font-medium mt-4">
-            {isResting ? 'Recovery Period' : 'Training Active'}
-          </div>
+        {/* HUGE Timer Display */}
+        <div className="text-center mb-4">
+          {sessionCompleted ? (
+            <div className="space-y-3">
+              <div className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none">
+                COMPLETE!
+              </div>
+              <div className="text-2xl sm:text-3xl md:text-4xl text-white/80 font-bold">
+                Workout Finished
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* MASSIVE TIMER */}
+              <div className={`text-8xl sm:text-9xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
+                isPaused ? 'animate-pulse opacity-70' : ''
+              }`}>
+                {formatTime(timeLeft)}
+              </div>
+              {/* Simplified State Text - Only show when resting */}
+              {isResting && (
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3 text-white/90">
+                  REST
+                </div>
+              )}
+            </>
+          )}
         </div>
 
-        {/* Simplified Progress Visualization - Reordered */}
-        <div className="w-full max-w-md mb-6">
+        {/* Bigger Progress Bar */}
+        <div className="w-full max-w-lg mb-4">
           <div className="relative mb-3">
             <Progress 
               value={getProgress} 
-              className={`h-3 bg-black/30 rounded-full border border-white/20 shadow-inner ${
+              className={`h-8 bg-black/30 rounded-full border border-white/20 shadow-inner ${
                 isResting ? '[&>div]:bg-gradient-to-r [&>div]:from-krav-rest [&>div]:to-krav-rest-bright [&>div]:shadow-lg [&>div]:shadow-blue-500/30' : 
                 '[&>div]:bg-gradient-to-r [&>div]:from-krav-success [&>div]:to-krav-success-bright [&>div]:shadow-lg [&>div]:shadow-green-500/30'
               } progress-smooth`}
             />
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-white/80 text-sm font-semibold">
+            <span className="text-white/80 text-xl md:text-2xl font-bold">
               {isResting ? 'Rest Progress' : 'Round Progress'}
             </span>
-            <span className="text-white/80 text-sm font-semibold">{Math.round(getProgress)}%</span>
+            <span className="text-white/80 text-xl md:text-2xl font-bold">{Math.round(getProgress)}%</span>
           </div>
         </div>
 
-        {/* Enhanced Control Button */}
+        {/* Much Larger Control Button */}
         {!sessionCompleted && (
-          <div className="mb-6">
+          <div className="mb-4">
             <Button
               onClick={togglePause}
-              className={`w-24 h-24 rounded-full text-white border-4 transition-all duration-400 btn-interactive flex items-center justify-center shadow-2xl ${
+              className={`w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full text-white border-4 transition-all duration-400 btn-interactive flex items-center justify-center shadow-2xl ${
                 isPaused 
                   ? 'bg-gradient-to-br from-krav-success to-krav-success-bright border-krav-success-bright shadow-glow-green hover:shadow-green-500/50' 
                   : 'bg-gradient-to-br from-krav-danger to-krav-danger-bright border-krav-danger-bright shadow-glow-red hover:shadow-red-500/50'
               }`}
             >
               {isPaused ? 
-                <Play className="w-12 h-12 ml-1" fill="currentColor" /> : 
-                <Pause className="w-12 h-12" fill="currentColor" />
+                <Play className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ml-1" fill="currentColor" /> : 
+                <Pause className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16" fill="currentColor" />
               }
             </Button>
-            <div className="text-center mt-3">
-              <span className="text-white/70 text-sm font-medium">
-                {isPaused ? 'Tap to Resume' : 'Tap to Pause'}
+            <div className="text-center mt-2">
+              <span className="text-white/70 text-xl md:text-2xl font-bold">
+                {isPaused ? 'Resume' : 'Pause'}
               </span>
             </div>
           </div>
         )}
 
-        {/* Enhanced Session Complete Actions */}
+        {/* Bigger Session Complete Actions */}
         {sessionCompleted && (
           <div className="flex flex-col gap-4 items-center">
             <div className="flex gap-4">
               <Button
                 onClick={onGoHome}
-                className="bg-gradient-to-r from-krav-success to-krav-success-bright hover:from-krav-success-bright hover:to-krav-success text-white px-8 py-3 rounded-2xl font-bold text-base shadow-xl hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-krav-success to-krav-success-bright hover:from-krav-success-bright hover:to-krav-success text-white px-10 py-5 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all duration-300"
               >
                 Finish Workout
               </Button>
               <Button
                 onClick={resetTimer}
-                className="bg-white/20 hover:bg-white/30 border border-white/30 text-white px-8 py-3 rounded-2xl font-bold text-base shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm"
+                className="bg-white/20 hover:bg-white/30 border border-white/30 text-white px-10 py-5 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm"
               >
                 Start Again
               </Button>
@@ -215,36 +230,36 @@ export function TimerScreen({ config, onGoHome }) {
         )}
       </div>
 
-      {/* Enhanced Bottom Info Panel with Cards */}
-      <div className={`p-6 backdrop-blur-xl border-t border-white/20 ${getFooterBackgroundColor()}`}>
-        {/* Workout Info Cards */}
-        <div className="flex justify-center gap-4 text-center mb-4">
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 min-w-[80px] border border-white/20 shadow-lg">
-            <div className="text-white/70 text-xs font-semibold mb-2 uppercase tracking-wider">Work</div>
-            <div className="text-white font-black text-lg">{formatTime(config.roundDuration)}</div>
+      {/* Much Bigger Footer Elements */}
+      <div className={`px-4 py-4 backdrop-blur-xl border-t border-white/20 ${getFooterBackgroundColor()}`}>
+        {/* Much Bigger Workout Info Cards */}
+        <div className="flex justify-center gap-3 text-center mb-4">
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 min-w-[100px] border border-white/20 shadow-lg">
+            <div className="text-white/70 text-base font-bold mb-2 uppercase tracking-wider">Work</div>
+            <div className="text-white font-black text-2xl md:text-3xl">{formatTime(config.roundDuration)}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 min-w-[80px] border border-white/20 shadow-lg">
-            <div className="text-white/70 text-xs font-semibold mb-2 uppercase tracking-wider">Rest</div>
-            <div className="text-white font-black text-lg">{formatTime(config.restDuration)}</div>
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 min-w-[100px] border border-white/20 shadow-lg">
+            <div className="text-white/70 text-base font-bold mb-2 uppercase tracking-wider">Rest</div>
+            <div className="text-white font-black text-2xl md:text-3xl">{formatTime(config.restDuration)}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 min-w-[80px] border border-white/20 shadow-lg">
-            <div className="text-white/70 text-xs font-semibold mb-2 uppercase tracking-wider">Total</div>
-            <div className="text-white font-black text-lg">
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 min-w-[100px] border border-white/20 shadow-lg">
+            <div className="text-white/70 text-base font-bold mb-2 uppercase tracking-wider">Total</div>
+            <div className="text-white font-black text-2xl md:text-3xl">
               {formatTime((config.roundDuration * config.rounds) + (config.restDuration * Math.max(0, config.rounds - 1)))}
             </div>
           </div>
         </div>
         
-        {/* Enhanced Workout Status */}
+        {/* Much Bigger Workout Status */}
         <div className="text-center">
-          <div className="inline-flex items-center bg-white/15 backdrop-blur-lg rounded-full px-6 py-3 border border-white/20 shadow-lg">
-            <div className={`w-3 h-3 rounded-full mr-3 shadow-lg ${
+          <div className="inline-flex items-center bg-white/15 backdrop-blur-lg rounded-full px-8 py-4 border border-white/20 shadow-lg">
+            <div className={`w-5 h-5 rounded-full mr-4 shadow-lg ${
               sessionCompleted ? 'bg-krav-success animate-pulse shadow-green-500/50' :
               isPaused ? 'bg-krav-danger animate-pulse shadow-red-500/50' :
               isResting ? 'bg-krav-rest animate-pulse shadow-blue-500/50' :
               'bg-krav-accent animate-pulse shadow-amber-500/50'
             }`}></div>
-            <span className="text-white font-bold text-base">
+            <span className="text-white font-bold text-2xl md:text-3xl">
               {workoutProgress}% Complete
             </span>
           </div>

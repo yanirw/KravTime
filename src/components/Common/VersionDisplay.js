@@ -43,7 +43,7 @@ export function GuideDisplay() {
               
               {/* Three Ways Section */}
               <div>
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <h3 className="text-xl font-bold text-white mb-4 flex items-center">
                   <span className="mr-2">🎯</span>
                   Three Ways to Set Values
                 </h3>
@@ -51,20 +51,20 @@ export function GuideDisplay() {
                   <div className="flex items-start space-x-3">
                     <div className="w-8 h-8 bg-krav-accent rounded flex items-center justify-center text-black font-bold text-sm">1</div>
                     <div>
-                      <div className="text-gray-300"><strong>Buttons:</strong> Click preset values like "2:00" or "3"</div>
+                      <div className="text-gray-200 text-base"><strong>Buttons:</strong> Click preset values like "2:00" or "3"</div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-8 h-8 bg-krav-success rounded flex items-center justify-center text-white font-bold text-sm">2</div>
                     <div>
-                      <div className="text-gray-300"><strong>Sliders:</strong> Drag to adjust values smoothly</div>
+                      <div className="text-gray-200 text-base"><strong>Sliders:</strong> Drag to adjust values smoothly</div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-8 h-8 bg-krav-rest rounded flex items-center justify-center text-white font-bold text-sm">3</div>
                     <div>
-                      <div className="text-gray-300 mb-1"><strong>Manual Input:</strong> Click the colored numbers to type directly</div>
-                      <div className="text-xs text-gray-400">
+                      <div className="text-gray-200 text-base mb-2"><strong>Manual Input:</strong> Click the colored numbers to type directly</div>
+                      <div className="text-sm text-gray-300">
                         Click: <span className="text-krav-accent">"3 rounds"</span>, <span className="text-krav-success">"2:00 per round"</span>, or <span className="text-krav-rest">"0:30 between rounds"</span>
                       </div>
                     </div>
@@ -74,19 +74,19 @@ export function GuideDisplay() {
               
               {/* Input Examples */}
               <div className="bg-gray-800/50 rounded-lg p-4">
-                <h3 className="text-lg font-semibold text-white mb-3">
+                <h3 className="text-lg font-bold text-white mb-3">
                   ⌨️ How to Type Numbers
                 </h3>
-                <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="grid grid-cols-2 gap-3 text-base">
                   <div className="space-y-1">
-                    <div className="text-gray-400">Type:</div>
+                    <div className="text-gray-300 font-semibold">Type:</div>
                     <code className="block bg-gray-700 px-2 py-1 rounded text-white">1000</code>
                     <code className="block bg-gray-700 px-2 py-1 rounded text-white">230</code>
                     <code className="block bg-gray-700 px-2 py-1 rounded text-white">90</code>
                     <code className="block bg-gray-700 px-2 py-1 rounded text-white">45</code>
                   </div>
                   <div className="space-y-1">
-                    <div className="text-gray-400">Result:</div>
+                    <div className="text-gray-300 font-semibold">Result:</div>
                     <div className="bg-gray-600 px-2 py-1 rounded text-white">10:00</div>
                     <div className="bg-gray-600 px-2 py-1 rounded text-white">2:30</div>
                     <div className="bg-gray-600 px-2 py-1 rounded text-white">1:30</div>
@@ -101,7 +101,7 @@ export function GuideDisplay() {
             <div className="p-4 bg-gray-800/50 rounded-b-2xl">
               <Button
                 onClick={() => setShowGuide(false)}
-                className="w-full bg-krav-accent hover:bg-krav-accent-bright text-black font-semibold"
+                className="w-full bg-krav-accent hover:bg-krav-accent-bright text-black font-bold text-base"
               >
                 Got it! Let's train 🥊
               </Button>

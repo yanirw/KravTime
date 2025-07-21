@@ -96,6 +96,9 @@ module.exports = {
         '10xl': '10rem',
         '12xl': '12rem',
         '14xl': '14rem',
+        '16xl': '16rem',
+        '18xl': '18rem',
+        '20xl': '20rem',
       },
       backdropBlur: {
         xs: '2px',
