@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/KravTime/static/css/main.0e8e33f9.css",
-    "main.js": "/KravTime/static/js/main.43d0556e.js",
+    "main.css": "/KravTime/static/css/main.eebd2942.css",
+    "main.js": "/KravTime/static/js/main.809f7c44.js",
     "index.html": "/KravTime/index.html",
-    "main.0e8e33f9.css.map": "/KravTime/static/css/main.0e8e33f9.css.map",
-    "main.43d0556e.js.map": "/KravTime/static/js/main.43d0556e.js.map"
+    "main.eebd2942.css.map": "/KravTime/static/css/main.eebd2942.css.map",
+    "main.809f7c44.js.map": "/KravTime/static/js/main.809f7c44.js.map"
   },
   "entrypoints": [
-    "static/css/main.0e8e33f9.css",
-    "static/js/main.43d0556e.js"
+    "static/css/main.eebd2942.css",
+    "static/js/main.809f7c44.js"
   ]
 }
