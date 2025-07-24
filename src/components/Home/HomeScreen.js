@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
-import { Timer, Shield, ChevronRight, Zap, Target } from 'lucide-react';
+import { Timer, Shield, ChevronRight, Zap, Target, Star } from 'lucide-react';
 import { ConfigurationPanel } from './ConfigurationPanel';
 import { SessionSummary } from './SessionSummary';
+import { PresetsPage } from './PresetsPage';
 
 /**
  * Home Screen component
@@ -12,10 +13,23 @@ export function HomeScreen({ onStartTimer }) {
   const [rounds, setRounds] = useState(3);
   const [roundDuration, setRoundDuration] = useState(120);
   const [restDuration, setRestDuration] = useState(30);
+  // Add state for showing presets
+  const [showPresets, setShowPresets] = useState(false);
 
-  const handleStartTimer = () => {
-    onStartTimer({ rounds, roundDuration, restDuration });
+  const handleStartTimer = (params) => {
+    if (params) {
+      onStartTimer(params);
+    } else {
+      onStartTimer({ rounds, roundDuration, restDuration });
+    }
   };
+
+  // If showing presets, render the PresetsPage
+  if (showPresets) {
+    return <PresetsPage onBack={() => setShowPresets(false)} onSelectPreset={({ rounds, roundDuration, restDuration }) => {
+      handleStartTimer({ rounds, roundDuration, restDuration });
+    }} />;
+  }
 
   return (
     <div className="h-full flex flex-col bg-transparent safe-area transition-all duration-500 animate-fade-in">
@@ -99,7 +113,18 @@ export function HomeScreen({ onStartTimer }) {
           </div>
 
           {/* Configuration Panel with enhanced styling */}
-          <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <div className="relative animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            {/* Small floating presets icon button with label */}
+            <button
+              className="absolute top-0 right-0 m-2 flex items-center gap-1 px-3 h-9 rounded-full bg-gradient-to-br from-krav-accent to-krav-accent-bright text-black shadow-glow border-2 border-krav-accent font-bold text-sm hover:scale-105 transition-transform duration-150 z-10"
+              title="Presets"
+              onClick={() => setShowPresets(true)}
+              aria-label="Presets"
+              type="button"
+            >
+              <Star className="w-5 h-5 mr-1" />
+              Presets
+            </button>
             <ConfigurationPanel
               rounds={rounds}
               setRounds={setRounds}
