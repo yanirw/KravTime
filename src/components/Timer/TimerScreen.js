@@ -141,10 +141,9 @@ export function TimerScreen({ config, onGoHome }) {
       </div>
 
       {/* MASSIVE TIMER SECTION - More Space */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 relative">
-        
-        {/* HUGE Timer Display */}
-        <div className="text-center mb-4">
+      <div className="flex-1 flex flex-col items-center justify-center sm:px-4 sm:py-2 relative gap-2">
+        {/* HUGE Timer Display - now visually dominant */}
+        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg">
           {sessionCompleted ? (
             <div className="space-y-3">
               <div className="text-[8rem] sm:text-[10rem] md:text-[12rem] lg:text-[14rem] xl:text-[16rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none">
@@ -157,24 +156,23 @@ export function TimerScreen({ config, onGoHome }) {
           ) : (
             <>
               {/* MASSIVE TIMER - Even Bigger for Gym Visibility */}
-              <div className={`text-mobile-timer sm:text-[12rem] md:text-[14rem] lg:text-[16rem] xl:text-[20rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
+              <div className={`text-mobile-timer sm:text-[10rem] md:text-[12rem] lg:text-[14rem] xl:text-[18rem] font-black text-white drop-shadow-2xl leading-none transition-all duration-300 my-0 py-0 text-center whitespace-nowrap w-full max-w-lg ${
                 isPaused ? 'animate-pulse opacity-70' : ''
-              }`}>
+              }`} style={{margin: 0, padding: 0}}>
                 {formatTime(timeLeft)}
               </div>
               {/* Simplified State Text - Only show when resting */}
               {isResting && (
-                <div className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3 text-white/90">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white/90">
                   REST
                 </div>
               )}
             </>
           )}
         </div>
-
-        {/* Bigger Progress Bar */}
-        <div className="w-full max-w-lg mb-4">
-          <div className="relative mb-3">
+        {/* Progress Bar - closer to timer, less margin */}
+        <div className="w-full max-w-lg mb-1">
+          <div className="relative mb-0">
             <Progress 
               value={getProgress} 
               className={`h-8 bg-black/30 rounded-full border border-white/20 shadow-inner ${
@@ -184,16 +182,15 @@ export function TimerScreen({ config, onGoHome }) {
             />
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-white/80 text-xl md:text-2xl font-bold">
+            <span className="text-2xl font-bold text-white/90">
               {isResting ? 'Rest Progress' : 'Round Progress'}
             </span>
-            <span className="text-white/80 text-xl md:text-2xl font-bold">{Math.round(getProgress)}%</span>
+            <span className="text-3xl font-extrabold text-white/90">{Math.round(getProgress)}%</span>
           </div>
         </div>
-
-        {/* Much Larger Control Button */}
+        {/* Much Larger Control Button - less margin */}
         {!sessionCompleted && (
-          <div className="mb-4">
+          <div className="mb-2">
             <Button
               onClick={togglePause}
               className={`w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full text-white border-4 transition-all duration-400 btn-interactive flex items-center justify-center shadow-2xl ${
@@ -214,7 +211,6 @@ export function TimerScreen({ config, onGoHome }) {
             </div>
           </div>
         )}
-
         {/* Bigger Session Complete Actions */}
         {sessionCompleted && (
           <div className="flex flex-col gap-4 items-center">
