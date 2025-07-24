@@ -170,7 +170,7 @@ export function ConfigurationPanel({
                   ? "bg-gradient-to-br from-krav-accent to-krav-accent-bright hover:from-krav-accent-bright hover:to-krav-accent text-black border-krav-accent shadow-glow" 
                   : ""
               }`}
-              onClick={() => setRounds(num)}
+              onClick={() => setRounds(Number(num))}
               role="radio"
               aria-checked={rounds === num}
               aria-label={`${num} round${num !== 1 ? 's' : ''}`}
@@ -179,44 +179,42 @@ export function ConfigurationPanel({
             </Button>
           ))}
         </div>
-        <div className="relative">
-          <Slider
-            value={[rounds]}
-            max={20}
-            min={1}
-            step={1}
-            onValueChange={(value) => setRounds(value[0])}
-            className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-accent [&>span:first-child>span]:to-krav-accent-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
-            aria-label="Number of rounds slider"
-            aria-valuemin={1}
-            aria-valuemax={20}
-            aria-valuenow={rounds}
-            aria-valuetext={`${rounds} round${rounds !== 1 ? 's' : ''}`}
-          />
-          <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
-            <span>1</span>
-            {isEditingRounds ? (
-              <input
-                type="text"
-                value={roundsInput}
-                onChange={(e) => setRoundsInput(e.target.value)}
-                onBlur={handleRoundsSubmit}
-                onKeyDown={handleRoundsKeyPress}
-                className="bg-gray-800/80 border border-krav-accent rounded px-2 py-1 text-lg text-white font-bold text-center w-20 focus:outline-none focus:ring-2 focus:ring-krav-accent"
-                autoFocus
-                placeholder="1-50"
-              />
-            ) : (
-              <span 
-                className="text-xl text-white font-bold cursor-pointer hover:bg-gray-700/50 rounded px-2 py-1 transition-colors duration-200"
-                onClick={handleRoundsClick}
-                title="Click to edit manually"
-              >
-                <span className="text-krav-accent text-xl font-bold">{rounds}</span> round{rounds !== 1 ? 's' : ''}
-              </span>
-            )}
-            <span>20</span>
-          </div>
+        <Slider
+          value={[rounds]}
+          max={20}
+          min={1}
+          step={1}
+          onValueChange={(value) => setRounds(Number(value[0]))}
+          className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-accent [&>span:first-child>span]:to-krav-accent-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
+          aria-label="Number of rounds slider"
+          aria-valuemin={1}
+          aria-valuemax={20}
+          aria-valuenow={rounds}
+          aria-valuetext={`${rounds} round${rounds !== 1 ? 's' : ''}`}
+        />
+        <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
+          <span>1</span>
+          {isEditingRounds ? (
+            <input
+              type="text"
+              value={roundsInput}
+              onChange={(e) => setRoundsInput(e.target.value)}
+              onBlur={handleRoundsSubmit}
+              onKeyDown={handleRoundsKeyPress}
+              className="bg-gray-800/80 border border-krav-accent rounded px-2 py-1 text-lg text-white font-bold text-center w-20 focus:outline-none focus:ring-2 focus:ring-krav-accent"
+              autoFocus
+              placeholder="1-50"
+            />
+          ) : (
+            <span 
+              className="text-xl text-white font-bold cursor-pointer hover:bg-gray-700/50 rounded px-2 py-1 transition-colors duration-200"
+              onClick={handleRoundsClick}
+              title="Click to edit manually"
+            >
+              <span className="text-krav-accent text-xl font-bold">{rounds}</span> round{rounds !== 1 ? 's' : ''}
+            </span>
+          )}
+          <span>20</span>
         </div>
       </div>
 
@@ -239,7 +237,7 @@ export function ConfigurationPanel({
                   ? "bg-gradient-to-br from-krav-success to-krav-success-bright hover:from-krav-success-bright hover:to-krav-success text-white border-krav-success shadow-glow-green" 
                   : ""
               }`}
-              onClick={() => setRoundDuration(seconds)}
+              onClick={() => setRoundDuration(Number(seconds))}
               role="radio"
               aria-checked={roundDuration === seconds}
               aria-label={`${formatTime(seconds)} round duration`}
@@ -248,47 +246,45 @@ export function ConfigurationPanel({
             </Button>
           ))}
         </div>
-        <div className="relative">
-          <Slider
-            value={[workDurationToSlider(roundDuration)]}
-            max={20} // 20 * 15 = 300 seconds (5:00), 15-second increments
-            min={1}  // 1 * 15 = 15 seconds (0:15)
-            step={1} // Each step = 15 seconds
-            onValueChange={(value) => {
-              const newDuration = sliderToWorkDuration(value[0]);
-              setRoundDuration(newDuration);
-            }}
-            className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-success [&>span:first-child>span]:to-krav-success-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
-            aria-label="Round duration slider"
-            aria-valuemin={15}
-            aria-valuemax={300}
-            aria-valuenow={roundDuration}
-            aria-valuetext={`${formatTime(roundDuration)} per round`}
-          />
-          <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
-            <span>0:15</span>
-            {isEditingRoundDuration ? (
-              <input
-                type="text"
-                value={roundDurationInput}
-                onChange={(e) => setRoundDurationInput(e.target.value)}
-                onBlur={handleRoundDurationSubmit}
-                onKeyDown={handleRoundDurationKeyPress}
-                className="bg-gray-800/80 border border-krav-success rounded px-2 py-1 text-lg text-white font-bold text-center w-28 focus:outline-none focus:ring-2 focus:ring-krav-success"
-                autoFocus
-                placeholder="10s-10m"
-              />
-            ) : (
-              <span 
-                className="text-xl text-white font-bold cursor-pointer hover:bg-gray-700/50 rounded px-2 py-1 transition-colors duration-200"
-                onClick={handleRoundDurationClick}
-                title="Click to edit manually"
-              >
-                <span className="text-krav-success text-xl font-bold">{formatTime(roundDuration)}</span> per round
-              </span>
-            )}
-            <span>5:00</span>
-          </div>
+        <Slider
+          value={[workDurationToSlider(roundDuration)]}
+          max={20}
+          min={1}
+          step={1}
+          onValueChange={(value) => {
+            const newDuration = sliderToWorkDuration(value[0]);
+            setRoundDuration(Number(newDuration));
+          }}
+          className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-success [&>span:first-child>span]:to-krav-success-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
+          aria-label="Round duration slider"
+          aria-valuemin={15}
+          aria-valuemax={300}
+          aria-valuenow={roundDuration}
+          aria-valuetext={`${formatTime(roundDuration)} per round`}
+        />
+        <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
+          <span>0:15</span>
+          {isEditingRoundDuration ? (
+            <input
+              type="text"
+              value={roundDurationInput}
+              onChange={(e) => setRoundDurationInput(e.target.value)}
+              onBlur={handleRoundDurationSubmit}
+              onKeyDown={handleRoundDurationKeyPress}
+              className="bg-gray-800/80 border border-krav-success rounded px-2 py-1 text-lg text-white font-bold text-center w-28 focus:outline-none focus:ring-2 focus:ring-krav-success"
+              autoFocus
+              placeholder="10s-10m"
+            />
+          ) : (
+            <span 
+              className="text-xl text-white font-bold cursor-pointer hover:bg-gray-700/50 rounded px-2 py-1 transition-colors duration-200"
+              onClick={handleRoundDurationClick}
+              title="Click to edit manually"
+            >
+              <span className="text-krav-success text-xl font-bold">{formatTime(roundDuration)}</span> per round
+            </span>
+          )}
+          <span>5:00</span>
         </div>
       </div>
 
@@ -311,7 +307,7 @@ export function ConfigurationPanel({
                   ? "bg-gradient-to-br from-krav-rest to-krav-rest-bright hover:from-krav-rest-bright hover:to-krav-rest text-white border-krav-rest shadow-glow-blue" 
                   : ""
               }`}
-              onClick={() => setRestDuration(seconds)}
+              onClick={() => setRestDuration(Number(seconds))}
               role="radio"
               aria-checked={restDuration === seconds}
               aria-label={`${formatTime(seconds)} rest duration`}
@@ -320,47 +316,45 @@ export function ConfigurationPanel({
             </Button>
           ))}
         </div>
-        <div className="relative">
-          <Slider
-            value={[restDurationToSlider(restDuration)]}
-            max={8} // 8 * 15 = 120 seconds (2:00)
-            min={0}  // 0 * 15 = 0 seconds (no rest)
-            step={1} // 15-second increments
-            onValueChange={(value) => {
-              const newDuration = sliderToRestDuration(value[0]);
-              setRestDuration(newDuration);
-            }}
-            className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-rest [&>span:first-child>span]:to-krav-rest-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
-            aria-label="Rest duration slider"
-            aria-valuemin={0}
-            aria-valuemax={120}
-            aria-valuenow={restDuration}
-            aria-valuetext={`${restDuration === 0 ? 'No rest' : formatTime(restDuration)} between rounds`}
-          />
-          <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
-            <span>0:00</span>
-            {isEditingRestDuration ? (
-              <input
-                type="text"
-                value={restDurationInput}
-                onChange={(e) => setRestDurationInput(e.target.value)}
-                onBlur={handleRestDurationSubmit}
-                onKeyDown={handleRestDurationKeyPress}
-                className="bg-gray-800/80 border border-krav-rest rounded px-2 py-1 text-lg text-white font-bold text-center w-28 focus:outline-none focus:ring-2 focus:ring-krav-rest"
-                autoFocus
-                placeholder="0s-2m"
-              />
-            ) : (
-              <span 
-                className="text-xl text-white font-bold cursor-pointer hover:bg-gray-700/50 rounded px-2 py-1 transition-colors duration-200"
-                onClick={handleRestDurationClick}
-                title="Click to edit manually"
-              >
-                <span className="text-krav-rest text-xl font-bold">{restDuration === 0 ? 'No rest' : formatTime(restDuration)}</span> between rounds
-              </span>
-            )}
-            <span>2:00</span>
-          </div>
+        <Slider
+          value={[restDurationToSlider(restDuration)]}
+          max={8}
+          min={0}
+          step={1}
+          onValueChange={(value) => {
+            const newDuration = sliderToRestDuration(value[0]);
+            setRestDuration(Number(newDuration));
+          }}
+          className="py-2 [&>span:first-child]:h-2 [&>span:first-child>span]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-krav-rest [&>span:first-child>span]:to-krav-rest-bright [&>span:first-child]:bg-gray-700/90 [&>span:first-child]:border [&>span:first-child]:border-gray-500/30"
+          aria-label="Rest duration slider"
+          aria-valuemin={0}
+          aria-valuemax={120}
+          aria-valuenow={restDuration}
+          aria-valuetext={`${restDuration === 0 ? 'No rest' : formatTime(restDuration)} between rounds`}
+        />
+        <div className="flex justify-between items-center text-base text-gray-200 mt-1 font-bold">
+          <span>0:00</span>
+          {isEditingRestDuration ? (
+            <input
+              type="text"
+              value={restDurationInput}
+              onChange={(e) => setRestDurationInput(e.target.value)}
+              onBlur={handleRestDurationSubmit}
+              onKeyDown={handleRestDurationKeyPress}
+              className="bg-gray-800/80 border border-krav-rest rounded px-2 py-1 text-lg text-white font-bold text-center w-28 focus:outline-none focus:ring-2 focus:ring-krav-rest"
+              autoFocus
+              placeholder="0s-2m"
+            />
+          ) : (
+            <span 
+              className="text-xl text-white font-bold cursor-pointer hover:bg-gray-700/50 rounded px-2 py-1 transition-colors duration-200"
+              onClick={handleRestDurationClick}
+              title="Click to edit manually"
+            >
+              <span className="text-krav-rest text-xl font-bold">{restDuration === 0 ? 'No rest' : formatTime(restDuration)}</span> between rounds
+            </span>
+          )}
+          <span>2:00</span>
         </div>
       </div>
     </div>

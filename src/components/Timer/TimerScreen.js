@@ -146,10 +146,10 @@ export function TimerScreen({ config, onGoHome }) {
         <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg">
           {sessionCompleted ? (
             <div className="space-y-3">
-              <div className="text-[8rem] sm:text-[10rem] md:text-[12rem] lg:text-[14rem] xl:text-[16rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none">
+              <div className="text-4xl sm:text-6xl md:text-8xl font-black text-white drop-shadow-2xl tracking-tighter leading-none">
                 COMPLETE!
               </div>
-              <div className="text-2xl sm:text-3xl md:text-4xl text-white/80 font-bold">
+              <div className="text-xl sm:text-2xl md:text-3xl text-white/80 font-bold">
                 Workout Finished
               </div>
             </div>
@@ -213,17 +213,17 @@ export function TimerScreen({ config, onGoHome }) {
         )}
         {/* Bigger Session Complete Actions */}
         {sessionCompleted && (
-          <div className="flex flex-col gap-4 items-center">
-            <div className="flex gap-4">
+          <div className="flex flex-col gap-3 items-center">
+            <div className="flex gap-2">
               <Button
                 onClick={onGoHome}
-                className="bg-gradient-to-r from-krav-success to-krav-success-bright hover:from-krav-success-bright hover:to-krav-success text-white px-10 py-5 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-krav-success to-krav-success-bright hover:from-krav-success-bright hover:to-krav-success text-white px-4 py-2 rounded-xl font-bold text-base shadow-xl hover:scale-105 transition-all duration-300"
               >
                 Finish Workout
               </Button>
               <Button
                 onClick={resetTimer}
-                className="bg-white/20 hover:bg-white/30 border border-white/30 text-white px-10 py-5 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm"
+                className="bg-white/20 hover:bg-white/30 border border-white/30 text-white px-4 py-2 rounded-xl font-bold text-base shadow-xl hover:scale-105 transition-all duration-300 backdrop-blur-sm"
               >
                 Start Again
               </Button>

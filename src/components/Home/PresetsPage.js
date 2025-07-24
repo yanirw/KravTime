@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 const PRESETS = [
   {
@@ -68,11 +69,27 @@ const PRESETS = [
   },
   {
     name: 'Krav Maga 360 Drill',
-    rounds: 10,
+    rounds: 3,
     roundDuration: 60,
-    restDuration: 15,
-    description: 'Rotate attackers every round',
+    restDuration: 10,
+    description: 'Defend against attacks from all directions. Rotate attackers each round.',
     icon: '🔄',
+  },
+  {
+    name: 'Krav Maga Multiple Opponents',
+    rounds: 6,
+    roundDuration: 60,
+    restDuration: 30,
+    description: 'Face multiple attackers. Switch roles each round. Practice awareness and movement.',
+    icon: '👥',
+  },
+  {
+    name: 'Krav Maga Surprise Attack',
+    rounds: 6,
+    roundDuration: 30,
+    restDuration: 10,
+    description: 'Sudden weapon attacks (knife/stick). React and neutralize quickly.',
+    icon: '⚡️',
   },
   {
     name: 'MMA Conditioning (Shark Tank)',
@@ -109,37 +126,68 @@ function formatTime(seconds) {
   return `${s}s`;
 }
 
+const PRESETS_PER_PAGE = 6;
+
 export function PresetsPage({ onBack, onSelectPreset }) {
+  const [page, setPage] = useState(0);
+  const totalPages = Math.ceil(PRESETS.length / PRESETS_PER_PAGE);
+  const startIdx = page * PRESETS_PER_PAGE;
+  const endIdx = startIdx + PRESETS_PER_PAGE;
+  const pagePresets = PRESETS.slice(startIdx, endIdx);
+
   return (
-    <div className="h-full flex flex-col items-center justify-start bg-black/80 p-4 animate-fade-in">
+    <div className="h-full flex flex-col items-center justify-start bg-black/80 p-2 animate-fade-in">
       <div className="w-full max-w-md mx-auto">
-        <div className="flex items-center mb-4">
-          <Button onClick={onBack} className="mr-2 px-3 py-1 text-sm font-bold bg-gray-800 text-white border border-gray-600 rounded-lg">Back</Button>
-          <h2 className="text-2xl font-black text-white flex-1 text-center">Presets</h2>
+        {/* Header: Back icon left, Presets title perfectly centered */}
+        <div className="relative flex items-center mb-3 mt-2 h-12">
+          <div className="absolute left-0 top-0 h-full flex items-center">
+            <Button onClick={onBack} className="p-2 text-sm font-bold bg-gray-800 text-white border border-gray-600 rounded-full"><ArrowLeft className="w-5 h-5" /></Button>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <h2 className="text-xl font-black text-white text-center w-full">Presets</h2>
+          </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {PRESETS.map((preset, idx) => (
+        <div className="flex flex-col gap-2 mb-2">
+          {pagePresets.map((preset) => (
             <Button
               key={preset.name}
-              className="flex flex-col items-start justify-between h-28 p-3 bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-xl shadow hover:scale-[1.03] transition-transform duration-150 overflow-hidden"
+              className="flex flex-col items-center justify-center h-20 p-2 bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-xl shadow hover:scale-[1.03] transition-transform duration-150 overflow-hidden w-[97%] mx-auto min-h-0"
               onClick={() => onSelectPreset({
                 rounds: preset.rounds,
                 roundDuration: preset.roundDuration,
                 restDuration: preset.restDuration,
               })}
             >
-              <div className="flex items-center w-full mb-1">
-                <span className="text-xl mr-2">{preset.icon}</span>
-                <span className="font-bold text-white text-base truncate flex-1">{preset.name}</span>
-              </div>
-              <div className="text-xs text-gray-300 flex flex-wrap gap-x-2 gap-y-1 mb-1">
+              <span className="text-lg mb-0.5">{preset.icon}</span>
+              <span className="font-bold text-white text-base text-center leading-tight mb-0.5">{preset.name}</span>
+              <div className="text-xs text-gray-300 flex flex-wrap gap-x-1 gap-y-0.5 mb-0.5 justify-center w-full text-center">
                 <span>Rounds: <b>{preset.rounds}</b></span>
                 <span>Duration: <b>{formatTime(preset.roundDuration)}</b></span>
                 <span>Break: <b>{formatTime(preset.restDuration)}</b></span>
               </div>
-              <div className="text-xs text-gray-400 truncate w-full">{preset.description}</div>
+              <div className="text-xs text-gray-400 truncate w-full text-center leading-tight">{preset.description}</div>
             </Button>
           ))}
+        </div>
+        {/* Navigation: Prev/Next centered and spaced at the bottom */}
+        <div className="flex justify-between items-center mt-2 w-full">
+          <Button
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            disabled={page === 0}
+            className="px-3 py-1 text-sm font-bold bg-gray-800 text-white border border-gray-600 rounded-lg disabled:opacity-50"
+          >
+            Prev
+          </Button>
+          <span className="text-gray-300 text-xs font-bold">
+            Page {page + 1} / {totalPages}
+          </span>
+          <Button
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={page === totalPages - 1}
+            className="px-3 py-1 text-sm font-bold bg-gray-800 text-white border border-gray-600 rounded-lg disabled:opacity-50"
+          >
+            Next
+          </Button>
         </div>
       </div>
     </div>

@@ -16,18 +16,20 @@ export function HomeScreen({ onStartTimer }) {
   // Add state for showing presets
   const [showPresets, setShowPresets] = useState(false);
 
-  const handleStartTimer = (params) => {
-    if (params) {
-      onStartTimer(params);
-    } else {
-      onStartTimer({ rounds, roundDuration, restDuration });
-    }
+  // Manual start uses local state only
+  const handleStartTimer = () => {
+    onStartTimer({
+      rounds,
+      roundDuration,
+      restDuration
+    });
   };
 
   // If showing presets, render the PresetsPage
   if (showPresets) {
-    return <PresetsPage onBack={() => setShowPresets(false)} onSelectPreset={({ rounds, roundDuration, restDuration }) => {
-      handleStartTimer({ rounds, roundDuration, restDuration });
+    return <PresetsPage onBack={() => setShowPresets(false)} onSelectPreset={(presetConfig) => {
+      // Preset start: trigger timer directly with preset config, do not update local state
+      onStartTimer(presetConfig);
     }} />;
   }
 
