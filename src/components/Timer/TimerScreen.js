@@ -157,7 +157,7 @@ export function TimerScreen({ config, onGoHome }) {
           ) : (
             <>
               {/* MASSIVE TIMER - Even Bigger for Gym Visibility */}
-              <div className={`text-[10rem] sm:text-[12rem] md:text-[14rem] lg:text-[16rem] xl:text-[20rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
+              <div className={`text-mobile-timer sm:text-[12rem] md:text-[14rem] lg:text-[16rem] xl:text-[20rem] font-black text-white drop-shadow-2xl tracking-tighter leading-none transition-all duration-300 ${
                 isPaused ? 'animate-pulse opacity-70' : ''
               }`}>
                 {formatTime(timeLeft)}
