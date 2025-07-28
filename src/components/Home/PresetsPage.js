@@ -115,6 +115,30 @@ const PRESETS = [
     description: 'Explosive output training',
     icon: '🔥',
   },
+  {
+    name: 'Heavybag Power Round',
+    rounds: 6,
+    roundDuration: 180,
+    restDuration: 60,
+    description: 'Focus on power shots and combinations',
+    icon: '💥',
+  },
+  {
+    name: 'Heavybag Speed Round',
+    rounds: 8,
+    roundDuration: 120,
+    restDuration: 30,
+    description: 'Fast combinations and footwork',
+    icon: '⚡',
+  },
+  {
+    name: 'Heavybag HIIT',
+    rounds: 12,
+    roundDuration: 60,
+    restDuration: 20,
+    description: 'High-intensity interval training',
+    icon: '💪',
+  },
 ];
 
 function formatTime(seconds) {

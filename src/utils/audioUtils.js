@@ -185,7 +185,7 @@ export const playBellSound = async (volume = 1.0) => {
  * @param {number} volume - Volume level (0-1)
  * @returns {Promise<boolean>} - Success status
  */
-export const playWoodClapSound = async (volume = 0.4) => {
+export const playWoodClapSound = async (volume = 0.48) => {
   try {
     if (!audioContext) return false;
     
@@ -277,9 +277,9 @@ export const playWarningSound = async () => {
 export const playTripleBell = async () => {
   try {
     // Fast-paced triple bell like in boxing - 400ms apart
-    await playBellSound(1.3);
-    setTimeout(() => playBellSound(1.3), 400);
-    setTimeout(() => playBellSound(1.3), 800);
+    await playBellSound(1.56);
+    setTimeout(() => playBellSound(1.56), 400);
+    setTimeout(() => playBellSound(1.56), 800);
     
     // Extended vibration pattern for session end
     if (navigator.vibrate) {

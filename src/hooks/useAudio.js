@@ -69,7 +69,7 @@ export const useAudio = () => {
     };
   }, []);
 
-  const playBell = useCallback(async (volume = 1.3) => {
+  const playBell = useCallback(async (volume = 1.56) => {
     try {
       const success = await playBellSound(volume);
       if (!success && audioInitialized) {
